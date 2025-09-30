@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Section 1.5: Case Study - DrawFigures * CSCD210 Study Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Quality refactors keep behaviour identical while shrinking repeated code. Run the program before and after to prove it to yourself.">
+</head>
+<body>
+  <div style="max-width: 900px; margin: 0 auto; font-family: Arial, sans-serif; background: #f7f7f7; border: 2px solid #000; padding: 16px;">
+    <section style="border: 2px solid #000; background: #e8f8ec; padding: 12px; text-align: center;">
+      <h2 style="margin: 0; font-size: 1.6em;"><span style="font-family: monospace;">Section 1.5: Case Study - DrawFigures</span></h2>
+      <p style="margin-top: 6px; font-size: 0.95em; color: #333;"><strong>CSCD210</strong> * Programming Principles I * Fall Quarter 2025</p>
+      <p style="margin-top: 8px;">Quality refactors keep behaviour identical while shrinking repeated code. Run the program before and after to prove it to yourself.</p>
+    </section>
+<section style="border: 2px solid #000; background: #fff; padding: 14px; margin-top: 16px;">
+      <h3 style="margin: 0 0 8px; font-size: 1.2em;"><span style="font-family: monospace;">Bare minimum checklist</span></h3>
+      <p style="margin: 0 0 8px;">Use the DrawFigures case study to see decomposition in action.</p>
+      <ol style="margin: 0 0 12px 20px;">
+      <li>Compile and run `DrawFigures3` from the terminal so you trust the output.</li>
+      <li>Sketch or annotate which helper prints each portion of the rocket before reading the code.</li>
+      <li>Commit the cleaned-up version with a message like `Refine DrawFigures with helper methods` after verifying the output matches the earlier version.</li>
+      </ol>
+      <p style="margin: 0; font-weight: 600;">Why it matters: Quality refactors keep behaviour identical while shrinking repeated code. Run the program before and after to prove it to yourself.</p>
+    </section>
+<section style="border: 2px solid #000; background: #fff7e5; padding: 12px; margin-top: 16px;"><details class="section-toggle" style="margin: 0;"><summary style="cursor: pointer; font-weight: 600; font-size: 1.3em;"><span style="font-family: monospace;">Quick Reference</span></summary><div style="margin-top: 10px;"><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Summary</summary><div style="margin-top: 6px;"><p> This section presents a case study where we
+take the complex figure output from Section 1.2
+(<code>DrawFigures1</code>) and improve it using the principles of
+procedural decomposition from Section 1.4. First, a <strong>structured
+version</strong> of the program is developed: we identify three distinct
+subfigures in the output and create a static method for each subfigure.
+This structured program (<code>DrawFigures2</code>) produces the same
+output as the original but with a clearer structure and less redundancy.
+Then we refine it further into a <strong>final version without
+redundancy</strong> (<code>DrawFigures3</code>), where we notice that
+even the subfigures had some common elements. We factor out those common
+pieces into additional helper methods to avoid any repetitive code. The
+final program calls these methods, resulting in well-organized code with
+minimal duplication. The section also walks through an <strong>analysis
+of flow of execution</strong> for the final program: tracing how
+<code>main</code> calls each method and how control flows through the
+methods to produce the output. By studying this case, students see a
+real example of taking a problem, implementing a solution, then
+improving the design using static methods to make the solution elegant
+and maintainable.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Key Concepts and Learning Objectives</summary><div style="margin-top: 6px;"><ul>
+<li>Learn how to apply procedural decomposition in a real scenario:
+identify logical groupings in a problem's output or behavior and create
+static methods accordingly.</li>
+<li>Understand the process of stepwise refinement: start with a working
+solution (even if it's redundant), then iteratively improve the
+structure (first by dividing into sub-problems, then by eliminating
+smaller redundancies).</li>
+<li>See the benefits of a structured solution: easier to read (because
+methods are like labeled sections of the output) and easier to modify
+(change in one place reflects everywhere).</li>
+<li>Solidify understanding of <strong>flow of execution</strong> by
+walking through a multi-method program. Specifically, track how the
+program moves from <code>main</code> into various methods and back out,
+in the correct order to produce the desired output.</li>
+<li>Recognize how eliminating redundancy often involves creating helper
+methods for smaller repeated patterns (even if those patterns are part
+of larger sections). For instance, if two of your subfigures share a
+common component, that component can be its own method called by
+both.</li>
+<li>Emphasize code <strong>reusability</strong>: the final version's
+methods are general enough that they could be reused to draw other
+figures or rearranged easily to change the output design.</li>
+<li>Reflection on design: realize that there's more than one way to
+decompose a problem, but some ways lead to clearer and more concise
+code. Learning to spot redundancy and abstract it into methods is a key
+programming skill.</li>
+</ul></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">New Terms (Definitions)</summary><div style="margin-top: 6px;"><div style="display: grid; gap: 8px; margin-top: 8px;"><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Case Study</summary><div style="margin-top: 6px;"> An in-depth example that shows the
+development process of a program or solution. It often starts from
+problem statement through initial solution to refined solution,
+illustrating the thought process and techniques used.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Structured Version</summary><div style="margin-top: 6px;"> In this context, a version of
+the program where the high-level structure has been established (major
+pieces separated into methods), but maybe some redundancy still exists
+within those pieces. It's an intermediate step in refining the
+program.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Final Version</summary><div style="margin-top: 6px;"> The fully refined program where
+redundancies have been removed and the structure is as optimal as we
+intended. In <code>DrawFigures</code>, this refers to the version with
+all repetitive patterns factored out into methods.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Helper Method</summary><div style="margin-top: 6px;"> A supporting method that performs a
+smaller task, often used by other methods to avoid repetition. Helper
+methods often don't make sense to call from <code>main</code> by
+themselves; they exist to be called by other methods in the program. (In
+the final version, methods like <code>drawCone()</code> and
+<code>drawBox()</code> are helper methods used by the subfigure
+methods.)</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Flow of Execution</summary><div style="margin-top: 6px;"> (Review) The path the program
+takes as it runs. In analysis, we often outline the flow to ensure every
+step happens in the correct order. For the case study, flow of execution
+analysis means detailing which method runs when, and how they
+collectively produce the output.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Redundancy vs. Structure</summary><div style="margin-top: 6px;"> (concept) Redundancy is
+having duplicate code; structure (in this case) means organizing code
+into methods that reflect the problem's inherent structure. Sometimes an
+initial structure might still contain redundant code, which further
+structuring (via helper methods) can eliminate.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Maintainability</summary><div style="margin-top: 6px;"> How easy it is to update or change
+the code later. A key benefit of the final decomposed version is
+maintainability: if the figure needed changes, you could modify one
+method rather than many individual lines scattered throughout.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Trace (Tracing Execution)</summary><div style="margin-top: 6px;"> The act of following a
+program's execution mentally or on paper, recording the sequence of
+method calls and statements executed. It's often done to verify that a
+program's logic is correct or to understand an unfamiliar code. The flow
+of execution analysis is essentially a trace of the program.</div></details></div></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">What You Should Know by the End</summary><div style="margin-top: 6px;"><ul>
+<li>How the complex figure output was broken down into three subfigures,
+and how each subfigure was implemented as a static method in the
+structured version. You should be able to describe what each of those
+methods does conceptually (e.g., "drawDiamond prints the top and bottom
+diamond shapes").</li>
+<li>What improvements were made from the structured version to the final
+version. Specifically, identify which lines of code were redundant in
+the structured version and how the final version removed that redundancy
+(e.g., creating <code>drawCone</code>, <code>drawV</code>, and
+<code>drawBox</code> methods and calling them in multiple places).</li>
+<li>Be able to sketch or outline the final program's structure: know the
+names of the methods and what output each produces, and how they are
+called from <code>main</code> to create the full figure.</li>
+<li>Understand the execution order of the final program: for example,
+"main calls drawDiamond, which calls drawCone and drawV, then main calls
+drawX, etc... producing the figure in order." Essentially, be comfortable
+with the idea of reading a multi-method program and predicting its
+output or behavior.</li>
+<li>Appreciate how much the code was reduced from the original
+<code>DrawFigures1</code> to the final <code>DrawFigures3</code>.
+Perhaps know metrics like number of lines reduced or number of repeated
+sections eliminated, showing the value of the decomposition.</li>
+<li>Have an idea of <strong>why</strong> this matters: not just to save
+lines, but because if you needed to adjust the figure (say make the
+rocket taller or change the text), the final code is much easier to
+adjust. Recognize that this approach is a blueprint for tackling bigger
+programs: get it working, then refactor to improve it.</li>
+<li>A subtle point: methods can be reused in different combinations. For
+example, in the final program, <code>drawCone</code> is used in
+drawDiamond, drawX, and drawRocket. This demonstrates reusability - one
+method serving multiple purposes. That's a powerful concept: write once,
+use many times, even in different contexts.</li>
+</ul></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Self-Check Questions (Toggle to reveal answers)</summary><div style="margin-top: 6px;"><ul>
+<li><p><strong>Q: In the structured version of DrawFigures, there were
+three static methods for three subfigures. Why did the designers choose
+three subfigures - what did those correspond to in the
+output?</strong><br/></p><details><summary><strong>Show
+Answer</strong></summary> <p>The output was logically
+divided into three parts (subfigures). In the drawing, you can see three
+distinct sections: the top part (a diamond shape made of slashes), the
+middle part (an X shape or hourglass), and the bottom part (the
+rocket-like shape with "United States" on it). The designers created one
+method for each of these subfigures, capturing that structure in code.
+Each method prints its portion of the figure. This way,
+<code>main</code> could simply call the three methods in
+order to produce the entire figure.</p> </details></li>
+<li><p><strong>Q: What is one example of redundancy that still existed
+in the structured version (DrawFigures2) that was removed in the final
+version (DrawFigures3)?</strong><br/></p><details><summary><strong>Show
+Answer</strong></summary> <p>One example: the
+triangular "cone" shape (the increasing-width slashes that form a
+triangle) appeared in both the first subfigure (diamond) and at the top
+and bottom of the rocket subfigure. In the structured version, each
+method that needed that shape had its own println statements for it,
+duplicating code. In the final version, they factored that pattern into
+a helper method <code>drawCone()</code>. Now
+<code>drawCone()</code> is called wherever that triangle is
+needed, eliminating the need to write those lines multiple
+times.</p> </details></li>
+<li><p><strong>Q: In the final DrawFigures program, list the order of
+method calls starting from main, until the entire figure is
+printed.</strong><br/></p><details><summary><strong>Show
+Answer</strong></summary> <p>In
+<code>main</code>, the program calls
+<code>drawDiamond()</code> first, so it jumps into that
+method. <code>drawDiamond</code> internally calls
+<code>drawCone()</code> then
+<code>drawV()</code>, prints a blank line, and returns.
+Next, back in <code>main</code>, it calls
+<code>drawX()</code>. The <code>drawX</code>
+method calls <code>drawV()</code> then
+<code>drawCone()</code>, prints a blank line, and returns.
+Then <code>main</code> calls
+<code>drawRocket()</code>. The
+<code>drawRocket</code> method calls
+<code>drawCone()</code>, then
+<code>drawBox()</code>, prints the "|United|" and "|States|"
+lines, then calls <code>drawBox()</code> again, then calls
+<code>drawCone()</code> again (for the bottom). Then
+everything returns back to main, and the figure is complete. So the
+sequence (with nesting indicated) is:<br/>
+<code>main -> drawDiamond -> drawCone; drawV; return;<br/>
+main -> drawX -> drawV; drawCone; return;<br/>
+main -> drawRocket -> drawCone; drawBox; (print United/States); drawBox;
+drawCone; return;<br/>
+main returns.</code></p> </details></li>
+</ul></div></details></div></details></section>
+<section style="border: 2px solid #000; background: #e8efff; padding: 12px; margin-top: 16px;"><details class="section-toggle" style="margin: 0;"><summary style="cursor: pointer; font-weight: 600; font-size: 1.3em;"><span style="font-family: monospace;">Tutorial and Code-Along</span></summary><div style="margin-top: 10px;"><p>In this case study, we will see how the concepts we learned come
+together in a practical example. We'll go step-by-step from the initial
+lengthy code (<code>DrawFigures1</code>) to a well-organized final
+version (<code>DrawFigures3</code>). This journey will highlight the
+thought process of improving a program's design after getting it to
+work.</p><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">1. Recap of the Problem - The Figure Output</summary><div style="margin-top: 6px;"><p><br/>
+The output we want to produce (as seen in Section 1.2) is a multi-part
+ASCII art figure. To visualize it clearly, here it is again (with labels
+for sections):</p><pre><code>Section 1 (Diamond shape):
+    /\
+   /  \
+  /    \
+  \    /
+   \  /
+    \/
+
+Section 2 (X shape/hourglass):
+  \    /
+   \  /
+    \/
+    /\
+   /  \
+  /    \
+
+Section 3 (Rocket shape):
+    /\
+   /  \
+  /    \
++------+
+|      |
+|      |
++------+
+|United|
+|States|
++------+
+|      |
+|      |
++------+
+    /\
+   /  \
+  /    \</code></pre><p><em>(Spacing is approximate here; in the actual output all parts
+align nicely - the case study ensures it prints exactly as
+intended.)</em></p><p>As you can see, the figure naturally breaks into three sections (I've
+labeled them Section 1, 2, 3 just for explanation): - Section 1 looks
+like a <strong>diamond</strong> or two triangles tip-to-tip. - Section 2
+looks like an <strong>X</strong> (two cones crossing). - Section 3 looks
+like a <strong>rocket</strong> with a nose cone, a body (the boxes and
+"United States"), and a tail cone (which is essentially the same shape
+as the nose, for symmetry).</p><p>In the original <code>DrawFigures1</code> code, all of this was done
+in <code>main</code> with a sequence of 30+ println statements. Now
+we'll apply procedural decomposition.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">2. Structured Version - Dividing into Subfigures
+(DrawFigures2)</summary><div style="margin-top: 6px;"><p><br/>
+The first improvement is to create a method for each distinct subfigure.
+So we'll have: - <code>drawDiamond()</code> method for Section 1. -
+<code>drawX()</code> method for Section 2. - <code>drawRocket()</code>
+method for Section 3.</p><p>These method names indicate what part of the figure they print. Our
+new <code>main</code> will simply call these three in order.</p><p>Let's sketch what each method does (not in full code yet, but
+outline): - <code>drawDiamond()</code>: prints the diamond shape and
+then perhaps a blank line after it (because in the output, after section
+1, there's a blank line before section 2). - <code>drawX()</code>:
+prints the X shape (which is like an hourglass crossing). Likely also
+prints a blank line after it, separating from the next part. -
+<code>drawRocket()</code>: prints the rocket: which itself consists of a
+cone, a box frame, "United/States", another box frame, and another
+cone.</p><p>We might not factor inside each method yet (that comes in the final
+version). We just want each method to handle its chunk.</p><p>If we refer back to the original code snippet from Section 1.2 for
+<code>DrawFigures1</code> (which we saw in a previous section of this
+tutorial), we can extract the relevant lines: - Lines for the diamond
+(section 1). - Lines for the X (section 2). - Lines for the rocket
+(section 3).</p><p>From [13], lines 1312-1318 look like:</p><pre><code>System.out.println("  /\\");
+System.out.println(" /  \\");
+System.out.println("/    \\");
+System.out.println("\\    /");
+System.out.println(" \\  /");
+System.out.println("  \\/");
+System.out.println();</code></pre><p>That prints the diamond and a blank line. That will be inside
+<code>drawDiamond()</code>.</p><p>Then lines 1319-1327 (with some overlap perhaps) for the X shape:</p><pre><code>System.out.println("\\    /");
+System.out.println(" \\  /");
+System.out.println("  \\/");
+System.out.println("  /\\");
+System.out.println(" /  \\");
+System.out.println("/    \\");
+System.out.println();</code></pre><p>That prints the X shape (notice it's basically the bottom of diamond
+then top of diamond) and a blank line. That goes into
+<code>drawX()</code>.</p><p>Then lines 1328-1341 for the rocket:</p><pre><code>System.out.println("  /\\");
+System.out.println(" /  \\");
+System.out.println("/    \\");
+System.out.println("+------+");
+System.out.println("|      |");
+System.out.println("|      |");
+System.out.println("+------+");
+System.out.println("|United|");
+System.out.println("|States|");
+System.out.println("+------+");
+System.out.println("|      |");
+System.out.println("|      |");
+System.out.println("+------+");
+System.out.println("  /\\");
+System.out.println(" /  \\");
+System.out.println("/    \\");</code></pre><p>That prints the rocket (no extra blank line after presumably, since
+it's the end).</p><p>Now, we implement our structured version as
+<code>DrawFigures2</code>:</p><pre><code>public class DrawFigures2 {
+    public static void main(String[] args) {
+        drawDiamond();
+        drawX();
+        drawRocket();
+    }
+    public static void drawDiamond() {
+        System.out.println("    /\\");
+        System.out.println("   /  \\");
+        System.out.println("  /    \\");
+        System.out.println("  \\    /");
+        System.out.println("   \\/");
+        System.out.println();
+    }
+    public static void drawX() {
+        System.out.println("  \\    /");
+        System.out.println("   \\  /");
+        System.out.println("    \\/");
+        System.out.println("    /\\");
+        System.out.println("   /  \\");
+        System.out.println("  /    \\");
+        System.out.println();
+    }
+    public static void drawRocket() {
+        System.out.println("    /\\");
+        System.out.println("   /  \\");
+        System.out.println("  /    \\");
+        System.out.println("+------+");
+        System.out.println("|      |");
+        System.out.println("|      |");
+        System.out.println("+------+");
+        System.out.println("|United|");
+        System.out.println("|States|");
+        System.out.println("+------+");
+        System.out.println("|      |");
+        System.out.println("|      |");
+        System.out.println("+------+");
+        System.out.println("    /\\");
+        System.out.println("   /  \\");
+        System.out.println("  /    \\");
+    }
+}</code></pre><p><em>(Note: I've adjusted spacing to the likely correct indent for
+each line based on the pattern, though typing in Markdown may not
+preserve them perfectly. In code, they should match exactly to produce
+the intended figure alignment.)</em></p><p>Now <code>DrawFigures2</code> will produce the same output as
+<code>DrawFigures1</code>. But now we see structure: <code>main</code>
+shows the high-level order of figure parts, and each part is isolated.
+However, there's still redundancy within these methods: -
+<code>drawDiamond</code> prints a cone shape up and an inverted cone
+down. The top half of <code>drawDiamond</code> and bottom half of
+<code>drawX</code> are similar patterns (the cone). - <code>drawX</code>
+prints an inverted cone then a cone. - <code>drawRocket</code> prints a
+cone shape at top and bottom (again that pattern), and prints two
+identical box frames (<code>+------+/| |</code> etc appears twice, above
+and below "United States").</p><p>So redundancy: - The "cone" shape (3 lines increasing in width, or
+any symmetrical triangle) appears in drawDiamond (as the top half), in
+drawX (as the bottom half), and twice in drawRocket (top and bottom). -
+The inverted "V" shape (the bottom half of diamond or top half of X)
+appears in drawDiamond (bottom half) and drawX (top half). - The "box
+frame" (the plus line and two pipes lines, which is a 3-line rectangle
+frame) appears twice in drawRocket (one before and one after the
+"United/States" lines).</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">3. Final Version - Eliminating Redundancy
+(DrawFigures3)</summary><div style="margin-top: 6px;"><p><br/>
+Now we tackle these redundancies by introducing helper methods: -
+<code>drawCone()</code> for the triangular cone shape (all the forward
+slashes increasing spacing). - <code>drawV()</code> for the inverted
+cone (the \ shape). - <code>drawBox()</code> for the 3-line box frame of
+plus and pipes.</p><p>Then we can rewrite our subfigure methods: -
+<code>drawDiamond()</code> can call <code>drawCone()</code> then
+<code>drawV()</code>, and print a blank line. - <code>drawX()</code> can
+call <code>drawV()</code> then <code>drawCone()</code>, and blank line.
+- <code>drawRocket()</code> can call <code>drawCone()</code>, then
+<code>drawBox()</code>, then print <code>|United|</code> and
+<code>|States|</code>, then call <code>drawBox()</code> again, then call
+<code>drawCone()</code> again. (We may include a blank line at end of
+<code>drawRocket</code> or not depending on formatting; in output it was
+end so probably not needed or you can include if you want a trailing
+newline).</p><p>So <code>DrawFigures3</code> might look like:</p><pre><code>public class DrawFigures3 {
+    public static void main(String[] args) {
+        drawDiamond();
+        drawX();
+        drawRocket();
+    }
+    public static void drawDiamond() {
+        drawCone();
+        drawV();
+        System.out.println();
+    }
+    public static void drawX() {
+        drawV();
+        drawCone();
+        System.out.println();
+    }
+    public static void drawRocket() {
+        drawCone();
+        drawBox();
+        System.out.println("|United|");
+        System.out.println("|States|");
+        drawBox();
+        drawCone();
+    }
+    // Helper methods:
+    public static void drawCone() {
+        System.out.println("    /\\");
+        System.out.println("   /  \\");
+        System.out.println("  /    \\");
+    }
+    public static void drawV() {
+        System.out.println("  \\    /");
+        System.out.println("   \\  /");
+        System.out.println("    \\/");
+    }
+    public static void drawBox() {
+        System.out.println("+------+");
+        System.out.println("|      |");
+        System.out.println("|      |");
+        System.out.println("+------+");
+    }
+}</code></pre><p>Let's verify mentally this produces the same output: -
+<code>main</code> calls <code>drawDiamond</code>: which calls
+<code>drawCone</code> (prints the 3 increasing lines <code>/\</code>
+etc), then <code>drawV</code> (prints the 3 lines <code>\/</code> etc),
+then prints a blank line. That yields section1 + blank line. -
+<code>main</code> calls <code>drawX</code>: which calls
+<code>drawV</code> (3 lines inverted V), then <code>drawCone</code> (3
+lines cone), then blank line. That yields section2 + blank line. -
+<code>main</code> calls <code>drawRocket</code>: - <code>drawCone</code>
+(3 lines up cone), - <code>drawBox</code> (which now prints the top
+border + two empty lines + bottom border of the box frame, notice I
+included top and bottom border in one <code>drawBox</code> call as 4
+lines including repeating plus at both top and bottom; but the listing
+above for drawBox prints 4 lines including plus at top and bottom, which
+might actually double-print the bottom border when called twice
+consecutively. We should be careful: likely the box frame should be
+printed such that two calls result in two separate frames.) - Actually,
+look at output: in rocket:</p><pre><code>+------+
+|      |
+|      |
++------+
+|United|
+|States|
++------+
+|      |
+|      |
++------+</code></pre><p>We have two distinct frames, each with top and bottom border. Our
+<code>drawBox()</code> approach printed a complete frame including top
+and bottom border. But in output, after printing the first box, the
+bottom border of the first box coincides with the top border of the
+second box (the line after "States"). Actually no, looking carefully,
+there's a border line above United and a border line below United (the
+one above United is bottom of first frame, the one below States is top
+of second frame or bottom of second frame?).</p><pre><code> Actually, let's parse rocket:
+ - Cone (3 lines)
+ - Frame 1:
+   +------+
+   |      |
+   |      |
+   +------+
+ - United/States lines
+ - Frame 2:
+   +------+
+   |      |
+   |      |
+   +------+
+ - Cone (3 lines)
+
+ Yes, there are clearly two +------+ lines around United States: one above "|United|" and one below "|States|". Those are bottom of frame1 and top of frame2 colliding? Or they purposely left a gap? Let's check original code lines for rocket:
+
+ In original:
+ ```
+ +------+
+ |      |
+ |      |
+ +------+
+ |United|
+ |States|
+ +------+    &lt;-- here a plus after States
+ |      |
+ |      |
+ +------+    &lt;-- last plus
+ ```
+ Actually, original code shows:
+ ```
+ +------+
+ |      |
+ |      |
+ +------+
+ |United|
+ |States|
+ +------+
+ |      |
+ |      |
+ +------+
+ ```
+ So indeed:
+ - After first box frame, they printed United/States, then another +------+, then empty lines, then final +------+.
+ That means they treated the upper and lower frames separately (not merging them into one bigger frame, because "United States" is not inside a frame with the empties).
+
+ They basically did:
+ Cone; 
+ print top frame (with top and bottom border); 
+ print United/States; 
+ print bottom frame (with top and bottom border); 
+ Cone.
+
+ So our approach:
+ Maybe define drawBox() to print a frame with top and bottom border inclusive, which is exactly what we've done, meaning:
+ - call drawBox() once for the frame above United (it prints plus, empties, plus),
+ - then call drawBox() again for the frame below United.
+ Wait, if drawBox prints both top and bottom, doing it twice will produce:
+   plus, empties, plus, plus, empties, plus
+ That double plus in the middle isn't what's shown. Actually in output, after the first frame's bottom plus, they did not have another plus immediately, they had the United line. So indeed, in output the two frames are separated by the United block.
+ So calling drawBox() twice without anything in between would output two frames back-to-back, which is not what we want (that would produce a plus line with nothing between, which is not what we have).
+
+ In our plan, we call drawBox(), then print United lines, then call drawBox() again. That fits: first call outputs first frame fully, then after that we print United/States, then second call outputs second frame.
+
+ However, check the content of drawBox in our final code above: it prints top border, empty lines, bottom border, and again top border and bottom border if called twice will produce two border lines in a row?
+ Actually, our drawBox prints:
+ ```
+ +------+
+ |      |
+ |      |
+ +------+
+ ```
+ All four lines of a closed box including both top and bottom border.
+
+ If we call drawBox() and then later call drawBox() again, the first call ends with +------+ (bottom of first frame), then we print |United|, |States|, then the second call will print +------+ as its top border, giving a border after States, which matches the output (there is a +------+ immediately after |States|). That is the top border of second frame, which also doubles as bottom border of first frame visually separated by the United block? Actually, no, the first frame bottom border was printed by drawBox call at end of first call, then we printed United/States with no border between them and plus line after States from second call top border:
+ Wait, let's align:
+
+ After first drawBox call:
+ we have printed up to first frame bottom border:
+ ```
+ +------+  (bottom of frame1)
+ ```
+ Then we print |United| and |States|.
+ Now second drawBox call prints:
+ ```
+ +------+  (top of frame2)
+ |      |
+ |      |
+ +------+  (bottom of frame2)
+ ```
+ So the line immediately after |States| in output is +------+, which is actually the top border of second frame, not the bottom of first frame (which already printed above United lines). So our output would be:
+
+ Cone
+ first frame (ends with +------+)
+ United
+ States
+ +------+ (top of second frame)
+ empties
+ +------+ (bottom of second frame)
+ Cone
+
+ Actually, check output above: after States, there's +------+, empties, +------+. That matches exactly what our second call did. Good.
+
+ So our approach is correct:
+ drawBox prints a full closed frame. We call it, get a closed frame. Then we print text, then call it again, get another closed frame.
+
+ This double usage means there's an extra border line though: the bottom of first frame and top of second frame are separate, meaning output had them separated by the United lines, which they are. So it's fine, they're distinct.
+
+ Conclusion: drawBox as defined is fine. We just need to ensure the placement is right.</code></pre><ul>
+<li>Then after second drawBox, we call drawCone again.</li>
+</ul><p>So yes, final rocket code:
+<code>drawCone(); drawBox(); print United/States; drawBox(); drawCone();</code>
+That should produce exactly the sequence in output, with no extraneous
+lines. - We must ensure formatting: between method calls we didn't
+inadvertently omit or add extra blank lines. According to output: -
+After Diamond, there is a blank line (we have that in drawDiamond). -
+After X, blank line (we have that in drawX). - After Rocket, presumably
+program ends, perhaps no extra blank needed (we didn't put one, it's
+fine).</p><p>So <code>DrawFigures3</code> as written should produce identical
+output to <code>DrawFigures2</code> and <code>DrawFigures1</code>. But
+now the code is much shorter and clearer.</p><p>Check differences: <code>DrawFigures1</code> was ~33 lines of actual
+print statements. <code>DrawFigures3</code> uses far fewer: -
+<code>drawCone</code>: 3 lines - <code>drawV</code>: 3 lines -
+<code>drawBox</code>: 4 lines - <code>drawDiamond</code>: calls cone+v
+(no direct prints except blank) - <code>drawX</code>: calls v+cone -
+<code>drawRocket</code>: calls methods and prints 2 lines Total actual
+print lines: 3+3+4+0+0+2 = 12 lines of actual printing (the rest are
+method calls or blanks), versus 30+ originally. Big reduction in
+redundancy.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">4. Analyzing Flow of Execution for
+DrawFigures3</summary><div style="margin-top: 6px;"><p><br/>
+To ensure we and the students understand how this works, let's trace the
+final program's execution order and output: - Start in
+<code>main</code>. - <code>main</code> calls
+<code>drawDiamond()</code>.</p><ul>
+<li><p>Execution jumps to <code>drawDiamond</code>. - In
+<code>drawDiamond</code>: first statement is <code>drawCone();</code>.
+Jump into <code>drawCone</code>. - In <code>drawCone</code>: print
+<code>" /\\"</code>, <code>" / \\"</code>, <code>" / \\"</code>. (Note:
+each of those is one line with proper escapes for backslashes - they
+output the triangle top). Then <code>drawCone</code> ends. - Back to
+<code>drawDiamond</code>: next statement is <code>drawV();</code>. Jump
+into <code>drawV</code>. - In <code>drawV</code>: print
+<code>" \\ /"</code>, <code>" \\ /"</code>, <code>" \\/"</code>. (This
+outputs the inverted triangle shape). Then <code>drawV</code> ends. -
+Back to <code>drawDiamond</code>: next statement
+<code>System.out.println();</code> prints a blank line. Then
+<code>drawDiamond</code> ends. - Back to <code>main</code>: next call is
+<code>drawX();</code>. - In <code>drawX</code>: first calls
+<code>drawV();</code> - we already know <code>drawV</code> prints the 3
+lines of the inverted shape and returns. - Then <code>drawX</code> calls
+<code>drawCone();</code> - prints the 3 lines of the cone shape and
+returns. - Then <code>drawX</code> prints a blank line. Ends. - Back to
+<code>main</code>: next call is <code>drawRocket();</code>. - In
+<code>drawRocket</code>: calls <code>drawCone();</code> - prints 3 lines
+of cone (this is the top of the rocket). - Then calls
+<code>drawBox();</code> - prints 4 lines:</p>
+<p>+------+ | | | | +------+</p></li>
+</ul><p>(This is the top frame). - Then <code>drawRocket</code> has two
+println statements: <code>System.out.println("|United|");</code>
+<code>System.out.println("|States|");</code> (These print the text
+lines). - Then <code>drawRocket</code> calls <code>drawBox();</code>
+again - this prints another 4 lines:</p><pre><code>+------+
+|      |
+|      |
++------+</code></pre><p>(the bottom frame). - Then <code>drawRocket</code> calls
+<code>drawCone();</code> again - prints 3 lines of cone (the bottom
+cone). - <code>drawRocket</code> ends. - Back to <code>main</code>: no
+more calls; <code>main</code> ends.</p><p>Let's align that with the intended output: 1. Diamond method
+output:</p><pre><code>    /\
+   /  \
+  /    \
+  \    /
+   \  /
+    \/</code></pre><p>(and then a blank line) 2. X method output:</p><pre><code>  \    /
+   \  /
+    \/
+    /\
+   /  \
+  /    \</code></pre><p>(and blank line) 3. Rocket method output:</p><pre><code>    /\
+   /  \
+  /    \
++------+
+|      |
+|      |
++------+
+|United|
+|States|
++------+
+|      |
+|      |
++------+
+    /\
+   /  \
+  /    \</code></pre><p>No blank line after because it's end of program (if we wanted one we
+could add, but not necessary).</p><p>This matches exactly what we expect from earlier representation.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">5. Benefits Recap</summary><div style="margin-top: 6px;"><p><br/>
+We should highlight how the final version is better: - Clarity: any
+reader can see <code>drawDiamond</code>, <code>drawX</code>,
+<code>drawRocket</code> clearly as separate pieces. If there was a bug
+in one section, we know which method to check. - Reuse:
+<code>drawCone</code> and <code>drawV</code> are used multiple times. If
+we needed to change the width of the cone (say to make the figure wider
+or narrower), we change those methods, and it automatically updates all
+uses. Originally, we'd have to edit many lines scattered in
+<code>main</code>. - Extensibility: Suppose we wanted to add another
+part to the figure or reuse one of these parts in a different
+combination. With methods, we can mix and match or call them multiple
+times easily. - Fewer chances for mistakes: Because we factor out
+repeated patterns, we write them once correctly, and reduce the risk of
+typing errors in multiple places.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">6. Reflection on the Design Process</summary><div style="margin-top: 6px;"><p><br/>
+It's instructive to note how we got here: - First, we wrote a
+straightforward program to get correct output (even if it was long and
+repetitive). - Then we recognized logical structure in the output
+(subfigures) and split the code accordingly. - Then within those, we
+spotted smaller repeating patterns and abstracted them into helper
+methods. - At each step, we likely re-ran the program to ensure it still
+produced the same output (testing after each refactor to avoid
+introducing errors).</p><p>This is a common workflow in programming: 1. Make it work. 2. Make it
+right (correct any errors). 3. Make it better (refactor for clarity,
+eliminate redundancy, etc).</p><p>Beginners often think they must write the perfectly structured
+program from scratch; in practice, it's fine to start with something
+basic and improve it gradually.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">7. Takeaway for Students</summary><div style="margin-top: 6px;"><p><br/>
+By studying this case, you should aim to internalize a few things: -
+When you face a problem, think about its sub-parts. Even before coding,
+you can outline: "I need to do A, B, C." That can hint at what methods
+you'll need. - Don't be afraid to write an initial solution with some
+duplicated code while you're figuring it out. Once it works, step back
+and look for patterns to turn into methods. - This case was about
+printing, but the idea applies broadly: any time you have repeated logic
+or a conceptually separate task, consider a method for it. - Tracing
+through the final code line by line is a great exercise to ensure you
+understand how method calls work. Try explaining it or writing the call
+trace like we did above.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Conclusion</summary><div style="margin-top: 6px;"><p> We transformed a long, monolithic
+<code>main</code> into a well-structured set of methods in
+<code>DrawFigures3</code>. The output hasn't changed, but the program's
+organization has improved drastically. This makes our code easier to
+read, easier to maintain, and a great example of the power of procedural
+decomposition. We'll use these same skills as programs get more complex,
+and later chapters will introduce additional structures (like loops and
+parameters) to further enhance what we can do with methods.</p><hr/><p>After walking through these five sections, you've gained not only
+Java syntax and output skills, but also an approach to breaking down
+problems and organizing your solutions. This foundation will serve you
+well as we move into making programs that not only produce output but
+also handle data and user input in subsequent chapters. Keep practicing
+and experimenting with writing methods and you'll continue to grow more
+comfortable with designing your programs.</p></div></details></div></details></section>
+    <section style="border: 2px dashed #000; background: #fff; padding: 12px; margin-top: 16px;">
+      <p style="margin: 0; font-weight: 600;">Help us improve:</p>
+      <p style="margin: 4px 0 0;">Let us know what was confusing or where you got stuck. <a href="feedback.html" style="color: #184592; font-weight: 600;">Share anonymous feedback</a>.</p>
+    </section>
+    <div style="margin-top: 16px; text-align: center;">
+      <a href="index.html" style="color: #184592; font-weight: 600;">Back to Chapter 1 Overview</a>
+    </div>
+  </div>
+</body>
+</html>

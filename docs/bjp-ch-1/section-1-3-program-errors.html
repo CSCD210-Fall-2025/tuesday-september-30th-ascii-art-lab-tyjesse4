@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Section 1.3: Program Errors * CSCD210 Study Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Debugging is iterative. Make small changes, re-run quickly, and keep your commit history honest about what changed.">
+</head>
+<body>
+  <div style="max-width: 900px; margin: 0 auto; font-family: Arial, sans-serif; background: #f7f7f7; border: 2px solid #000; padding: 16px;">
+    <section style="border: 2px solid #000; background: #e8f8ec; padding: 12px; text-align: center;">
+      <h2 style="margin: 0; font-size: 1.6em;"><span style="font-family: monospace;">Section 1.3: Program Errors</span></h2>
+      <p style="margin-top: 6px; font-size: 0.95em; color: #333;"><strong>CSCD210</strong> * Programming Principles I * Fall Quarter 2025</p>
+      <p style="margin-top: 8px;">Debugging is iterative. Make small changes, re-run quickly, and keep your commit history honest about what changed.</p>
+    </section>
+<section style="border: 2px solid #000; background: #fff; padding: 14px; margin-top: 16px;">
+      <h3 style="margin: 0 0 8px; font-size: 1.2em;"><span style="font-family: monospace;">Bare minimum checklist</span></h3>
+      <p style="margin: 0 0 8px;">Errors are signals, not failures. Practice the mindset while the stakes are small.</p>
+      <ol style="margin: 0 0 12px 20px;">
+      <li>Label new issues as syntax, runtime, or logic and say why.</li>
+      <li>Read the first compiler line carefully--line numbers and keywords point at the fix.</li>
+      <li>Rerun `javac` until it succeeds, then stage only the files you changed and commit with a message like `Fix typo in greeting`.</li>
+      </ol>
+      <p style="margin: 0; font-weight: 600;">Why it matters: Debugging is iterative. Make small changes, re-run quickly, and keep your commit history honest about what changed.</p>
+    </section>
+<section style="border: 2px solid #000; background: #fff7e5; padding: 12px; margin-top: 16px;"><details class="section-toggle" style="margin: 0;"><summary style="cursor: pointer; font-weight: 600; font-size: 1.3em;"><span style="font-family: monospace;">Quick Reference</span></summary><div style="margin-top: 10px;"><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Summary</summary><div style="margin-top: 6px;"><p> This section discusses the two major types
+of errors new programmers will encounter: <strong>syntax errors</strong>
+(also known as compile-time errors) and <strong>logic errors</strong>
+(often called bugs). We learn what syntax errors are - violations of the
+programming language's rules - and how the compiler helps identify them
+with error messages. We also cover logic errors - mistakes in the
+program's design that lead to incorrect behavior - which do not produce
+compiler errors but result in wrong output or unintended behavior. The
+concept of <strong>runtime errors</strong> (errors that crash the
+program during execution) is touched upon, with an example to illustrate
+that some errors only show up when you run the program (like trying to
+do impossible operations or infinite loops). By the end, students should
+understand that errors are a normal part of programming and know the
+basic approach to finding and fixing them (a process called
+<strong>debugging</strong>). We also introduce the historical origin of
+the term "bug."</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Key Concepts and Learning Objectives</summary><div style="margin-top: 6px;"><ul>
+<li>Understand what a <strong>syntax error</strong> is and be able to
+recognize common syntax errors (missing semicolons, mismatched quotes or
+braces, misspelling keywords, etc.).</li>
+<li>Learn to read <strong>compiler error messages</strong> and use them
+to locate and fix mistakes in your code.</li>
+<li>Understand what a <strong>logic error</strong> (bug) is - the
+program runs without crashing but produces the wrong result or does not
+behave as intended.</li>
+<li>Realize that the compiler will <em>not</em> catch logic errors; it's
+up to the programmer to test the program's output and find these
+issues.</li>
+<li>Get a basic idea of <strong>runtime errors</strong> - errors that
+occur during execution (like a program crashing or getting stuck due to
+an infinite loop or illegal operation) - and see an example.</li>
+<li>Appreciate the importance of thorough testing and debugging: running
+your program with various inputs or scenarios to ensure it works
+correctly, and using systematic thinking to locate errors.</li>
+<li>Learn that finding and fixing errors is a normal and expected part
+of programming, not a sign of failure. Even experienced programmers
+spend time debugging.</li>
+<li>(Fun fact objective) Know the story behind the term "bug" in
+programming and why we call fixing errors "debugging."</li>
+</ul></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">New Terms (Definitions)</summary><div style="margin-top: 6px;"><div style="display: grid; gap: 8px; margin-top: 8px;"><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Syntax Error</summary><div style="margin-top: 6px;"> An error in the source code that
+violates the grammatical rules of the programming language. For example,
+forgetting a semicolon or misspelling a keyword causes a syntax error.
+The compiler detects syntax errors and will refuse to produce bytecode
+until they are fixed.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Compiler Error Message</summary><div style="margin-top: 6px;"> The feedback given by the
+compiler when it encounters a syntax error. It usually includes a line
+number and a description of the problem (though sometimes the
+description can be cryptic). Example: <em>"Error: expected ';' at end of
+statement"</em> might indicate you missed a semicolon.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Debugging</summary><div style="margin-top: 6px;"> The process of finding and fixing errors
+(bugs) in your program. It often involves reading error messages, using
+print statements or a debugger tool to trace program execution, and
+reasoning about where things might be going wrong.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Logic Error (Bug)</summary><div style="margin-top: 6px;"> A flaw in the program's design
+that causes it to produce incorrect results or behave unexpectedly, even
+though it runs to completion. The program doesn't crash or stop; it
+simply doesn't do what you intended. Example: Using the wrong formula to
+convert temperatures so all outputs are wrong - the program runs, but
+the output is incorrect.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Runtime Error</summary><div style="margin-top: 6px;"> An error that occurs during program
+execution (after successful compilation) that causes the program to
+crash or hang. Examples include dividing by zero, trying to access
+something that doesn't exist, or infinite recursion/loops that never
+terminate. Runtime errors often manifest as exceptions (like
+<code>ArithmeticException</code> for divide by zero) or just program
+freeze.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Exception</summary><div style="margin-top: 6px;"> (Optional term) A kind of runtime error
+signal in Java. When something goes seriously wrong at runtime (like an
+illegal operation), Java throws an exception (e.g.,
+<code>NullPointerException</code>,
+<code>ArrayIndexOutOfBoundsException</code>). If not handled, these will
+crash the program. We will discuss exceptions more in later
+chapters.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Bug</summary><div style="margin-top: 6px;"> A general term for a mistake or error in a
+program that causes incorrect behavior. Fun fact: the term "bug" has
+been used since the early days of computing; famously, in 1947 engineers
+found a moth in a computer that was causing an error - they taped it in
+the logbook noting it as the "first actual case of bug being found."
+Since then, any glitch or error is nicknamed a bug.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Logic vs. Syntax Error</summary><div style="margin-top: 6px;"> (Not a single term, but
+important distinction) Syntax errors prevent the code from compiling;
+logic errors compile fine but produce wrong results.</div></details></div></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">What You Should Know by the End</summary><div style="margin-top: 6px;"><ul>
+<li>That if your program doesn't compile, you likely have a syntax
+error. You should know how to read the compiler's error output to
+identify what kind of syntax error and where in your code it
+happened.</li>
+<li>Some common syntax errors to watch out for: missing semicolons,
+missing/mismatched parentheses or braces, forgetting quotes around
+strings, using a variable or method name that's not declared or is
+misspelled, etc.</li>
+<li>That even if your program compiles successfully, it might still have
+logic errors. You need to test the program's behavior to catch
+those.</li>
+<li>Basic strategies to find logic errors: think through the expected
+behavior, add print statements to see intermediate values or execution
+flow (later you might use a debugger), and check the code logic against
+what it's supposed to do.</li>
+<li>Recognize a runtime error situation. For example, if your program is
+stuck (non-terminating) or crashes with an exception message, that's a
+runtime issue. You should have an idea that something like an infinite
+loop or infinite recursion will cause a program to hang or crash (stack
+overflow).</li>
+<li>That debugging is a normal part of programming. You shouldn't be
+discouraged by errors; instead, treat them as clues to improve your
+code. Knowing the origin of the term "bug" might provide some historical
+context and a bit of levity when you're fixing your own "bugs."</li>
+<li>How to approach errors systematically: fix the first error message
+first (because one syntax error can sometimes trigger many follow-up
+errors in the compiler output), test frequently (don't write 100 lines
+of code and then compile - write a little, compile, fix errors,
+continue), and when output is wrong, isolate which part of the code is
+responsible by checking intermediate results or using simpler
+inputs.</li>
+</ul></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Self-Check Questions (Toggle to reveal answers)</summary><div style="margin-top: 6px;"><ul>
+<li><p><strong>Q: The compiler reports an error "';' expected" at a
+certain line. What is the likely cause, and how do you fix
+it?</strong><br/></p><details><summary><strong>Show
+Answer</strong></summary> <p>This message usually
+means you forgot a semicolon at the end of a statement on that line (or
+possibly the previous line, since the compiler noticed it when it
+expected to see one). To fix it, you would add the missing
+<code>;</code> at the appropriate place. Occasionally, an
+earlier missing brace can also confuse the compiler to think a semicolon
+is missing, but the first thing to check is that every statement ends
+with <code>;</code>.</p> </details></li>
+<li><p><strong>Q: A program compiles fine, but when running, it produces
+an output that is clearly wrong. Is this a syntax error or a logic
+error, and what should you do next?</strong><br/></p><details><summary><strong>Show
+Answer</strong></summary> <p>If it compiles but the
+output is wrong, it's a <strong>logic error</strong> (a bug in the
+program's logic). The compiler didn't catch it because the code is
+syntactically correct. Next, you should debug the program: review your
+code to find where it deviates from the intended logic. You might add
+print statements to check values or flow, use test cases to narrow down
+the issue, and then correct the faulty logic. Essentially, ask yourself
+"Why is the output wrong? What part of the code produces that output?"
+and investigate there.</p> </details></li>
+<li><p><strong>Q: True or False - "If a program has a logic error, the
+Java compiler will display an error message to help you fix
+it."</strong><br/></p><details><summary><strong>Show
+Answer</strong></summary> <p>False. The Java compiler
+only checks for syntax errors (and some static semantic errors). It
+cannot tell if your program's logic is correct or not - if the code is
+grammatically legal Java, it will compile. Logic errors are on you, the
+programmer, to detect (via testing) and fix. The compiler won't directly
+point them out.</p> </details></li>
+</ul></div></details></div></details></section>
+<section style="border: 2px solid #000; background: #e8efff; padding: 12px; margin-top: 16px;"><details class="section-toggle" style="margin: 0;"><summary style="cursor: pointer; font-weight: 600; font-size: 1.3em;"><span style="font-family: monospace;">Tutorial and Code-Along</span></summary><div style="margin-top: 10px;"><p>By now, you've written and run some simple programs. Inevitably, you
+have or will run into errors. <strong>Don't panic!</strong> Errors are a
+normal part of programming - everyone, from beginners to experts,
+encounters them. The key is learning how to interpret errors and
+methodically fix them. Let's explore the two main kinds of errors.</p><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">1. Syntax Errors - When the Code Breaks the
+Rules</summary><div style="margin-top: 6px;"><p><br/>
+A <strong>syntax error</strong> occurs when your code does not follow
+the grammar rules of the Java language. In simpler terms, you typed
+something that Java simply doesn't understand or that violates the
+language's strict structure.</p><p>For example, consider this snippet:</p><pre><code>public class Example {
+    public static void main(String[] args) {
+        System.out.println("This line is fine.")
+        System.out.println("This line is missing a semicolon")
+    }
+}</code></pre><p>Here, the first <code>println</code> line is fine (though it has a
+period in the string that's not a problem because it's inside quotes and
+thus just character output). The second <code>println</code> line is
+missing a semicolon at the end. This is a syntax error. If you tried to
+compile this code, the compiler would likely point to the end of that
+second line and say something like <code>';' expected</code> or "reached
+end of file while parsing" (if it got really confused by missing
+symbols).</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Common causes of syntax errors</summary><div style="margin-top: 6px;"><p> - Missing
+punctuation: forgetting semicolons at end of statements, missing commas
+in lists (later when we have things like parameters or arrays), etc. -
+Mismatched or missing brackets/braces: forgetting a closing
+<code>}</code> or <code>)</code>. Sometimes if you open a parenthesis or
+brace and never close it, the compiler might throw an error at a later
+line or at end-of-file. These can be tricky - always count and match
+your <code>{}</code> and <code>()</code> carefully. Your editor can help
+by highlighting matches. - Misspelling identifiers or keywords: writing
+<code>Println</code> instead of <code>println</code>, or
+<code>Ststem</code> instead of <code>System</code>. Java is
+case-sensitive and every letter matters. A misspelled keyword or class
+name is essentially unrecognized text to the compiler. - Using a
+variable or method that hasn't been declared: For instance, writing
+<code>System.ou.println(...)</code> (missing the t in out) - the
+compiler will say "Cannot find symbol ou" because <code>System.ou</code>
+is not defined. - Having a string literal not properly closed: e.g.,
+<code>System.out.println("Hello world);</code> (missing the ending
+quote). This often leads to a cascade of weird errors because the
+compiler keeps looking for the closing quote. - Incorrectly ordered or
+nested statements: e.g., putting a statement outside of any method, or
+defining a method inside another method (Java doesn't allow that),
+etc.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Reading Compiler Error Messages</summary><div style="margin-top: 6px;"><p><br/>
+When you compile (or when VS Code's language server parses your file),
+you'll get error messages for any syntax errors. These messages
+typically include: - The file name and line number where the error was
+detected. - A description of the error.</p><p>Example:</p><pre><code>MyProgram.java:14: error: ';' expected
+        System.out.println("Hello world!")
+                                            ^</code></pre><p>This indicates in <code>MyProgram.java</code> at line 14, a
+<code>;</code> is expected. The caret <code>^</code> often points to the
+location in the line where the parser got confused - in this case after
+the <code>"</code> where it expected a semicolon. So we know: go to line
+14, add the semicolon.</p><p>Sometimes one mistake can cause multiple errors. For instance, if you
+forget a <code>}</code> to close a block, the compiler might report an
+error on a later line, or several errors as it tries to interpret the
+rest. A good strategy is to <strong>fix the first error first</strong>
+and then recompile - sometimes one fix will resolve subsequent
+errors.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Now You Try - Trigger and Fix a Syntax Error</summary><div style="margin-top: 6px;"><p><br/>
+Using one of your previous programs (say <code>MyComputer</code> or any
+simple program), introduce a deliberate syntax error and see what the
+compiler/IDE reports. For example: - Remove a semicolon from one of the
+<code>println</code> statements. - Or remove one of the curly braces
+<code>}</code> at the end of the class.</p><p>What error do you get? For a missing semicolon, you should see an
+error about <code>';' expected</code>. For a missing brace, you might
+see something like "expected '}'" or "reached end of file while
+parsing". Now, put the semicolon or brace back and compile again - the
+error should disappear. This exercise might seem trivial, but getting
+comfortable with reading error messages is half the battle in debugging
+syntax issues.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">2. Runtime Errors - When the Program Crashes or
+Freezes</summary><div style="margin-top: 6px;"><p><br/>
+A <strong>runtime error</strong> is an issue that doesn't surface during
+compilation, but causes the program to crash or misbehave during
+execution. Some runtime errors in Java result in an
+<strong>exception</strong> being thrown. For example: - Dividing by zero
+in an integer calculation will throw an <code>ArithmeticException</code>
+at runtime. - Trying to access an array index that's out of bounds
+(we'll see arrays later) throws an
+<code>ArrayIndexOutOfBoundsException</code>. - If you have an infinite
+loop or recursion, the program might not throw an exception but will
+effectively hang (run forever until you stop it) or in recursion's case
+eventually throw a <code>StackOverflowError</code> (as the call stack
+runs out of space).</p><p>In Chapter 1, we don't have the tools yet to do many of these (no
+loops or arrays yet), but one thing we can inadvertently do is create an
+<strong>infinite recursive call</strong>. For instance, consider this
+(don't run it, just read):</p><pre><code>public class Infinite {
+    public static void oops() {
+        System.out.println("Make it stop!");
+        oops();  // this method calls itself with no termination condition
+    }
+    public static void main(String[] args) {
+        oops();
+    }
+}</code></pre><p>What do you think happens here? The <code>oops()</code> method prints
+"Make it stop!" and then calls itself again... which prints and calls
+itself again... and so on. This is an infinite recursion. If you run
+this program, it will start printing "Make it stop!" repeatedly until
+eventually the program crashes with a <code>StackOverflowError</code>
+(because each nested call uses some stack memory and it never ends,
+exhausting memory).</p><p>This is an example of a runtime error: the code compiles fine
+(there's no syntax error in it), but it <em>logically</em> never ends.
+The crash (StackOverflowError) is a runtime exception indicating
+something went wrong during execution.</p><p>At this stage, just be aware that some errors won't be caught by the
+compiler. You'll only notice them when you run the program and observe
+something is wrong (like a crash or weird behavior).</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">3. Logic Errors - The Sneakiest of Bugs</summary><div style="margin-top: 6px;"><p><br/>
+A <strong>logic error</strong> (or bug) is when your program runs to
+completion without crashing, but the result or behavior is incorrect.
+The program did <em>something</em>, just not the right thing.</p><p>For example, say you intended to print the average of two numbers but
+you accidentally wrote code to print their sum. The program will run,
+but the output will be wrong according to the problem you were trying to
+solve.</p><p>In the context of what we've done so far, logic errors could be: -
+Printing the wrong text, perhaps due to a typo or wrong order of
+statements. - Omitting a line of output that should be there, or having
+an extra one that shouldn't. - Using <code>print</code> when you meant
+<code>println</code> (so output formatting is off), or vice versa.</p><p>These won't cause any errors from Java's perspective - you have to
+notice the problem by checking the output against what you expected.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Example - A Logic Error in Output</summary><div style="margin-top: 6px;"><p><br/>
+Suppose we wanted to print a simple three-line poem:</p><pre><code>Roses are red,
+Violets are blue,
+Java is fun.</code></pre><p>We write a program:</p><pre><code>public class Poem {
+    public static void main(String[] args) {
+        System.out.println("Roses are red,");
+        System.out.println("Violets are blue,");
+        System.out.println("Java is fun.");
+    }
+}</code></pre><p>This would output exactly as intended. Now, imagine we accidentally
+wrote the lines in the wrong order or with a mistake:</p><pre><code>public class Poem {
+    public static void main(String[] args) {
+        System.out.println("Roses are red,");
+        System.out.println("Java is fun.");
+        System.out.println("Violets are blue,");
+    }
+}</code></pre><p>This compiles and runs, but the poem's lines are jumbled. This is a
+logic error - the sequence is wrong. The computer did exactly what we
+told it to; it's our instructions that were flawed.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Finding Logic Errors</summary><div style="margin-top: 6px;"><p><br/>
+The primary way to catch logic errors is through
+<strong>testing</strong> and careful reasoning. When you run your
+program, always compare what it did versus what you intended. If there's
+a discrepancy, something in your code's logic is off.</p><p>For the poem example, the wrong order is easy to see. In a more
+complex program (say you were calculating a numeric result), you might
+not immediately know the answer is wrong unless you have an expected
+result to compare to. That's why, in development, we often create test
+cases or scenarios where we know what the result should be. If the
+program's output doesn't match, we know there's a bug.</p><p>When you find a logic error: - Trace through your code mentally (or
+with print statements) to follow what it's doing. - Check the values of
+important variables at different stages (later we'll learn about
+debugging tools, but printing intermediate results is a straightforward
+way). - Often, isolating the section of code responsible for producing
+the wrong output and inspecting it is the way to go.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Now You Try - Inducing a Logic Error</summary><div style="margin-top: 6px;"><p><br/>
+Let's do a quick exercise: Using the <code>DrawFigures1</code> program
+from Section 1.2 (the one with the ASCII art), intentionally introduce a
+logic error and observe it. - For example, change one of the output
+lines slightly. Perhaps on the line that prints <code>|United|</code>,
+make a typo like <code>|Untied|</code> (transposing letters). - Compile
+and run the program. It will run without complaints, but look at the
+output carefully. You will see <code>Untied</code> in the figure instead
+of <code>United</code>. The figure might now read as "Untied States"
+which is obviously not what we meant (unless we're making a cheeky
+joke). - This is a logic error. Everything about the code is
+syntactically fine, but the output is not what was intended.</p><p>To fix it, simply correct the string literal to
+<code>"|United|"</code>. This kind of error is easy to fix once noticed,
+but imagine if it were a subtle mathematical bug; it might take more
+effort to track down.</p><details><summary><strong>If you're curious: The
+origin of the term "bug"</strong></summary> <p>The use
+of the word "bug" to describe a program error goes back many years. A
+famous story involves computer science pioneer Grace Hopper. In 1947,
+she was working on the Harvard Mark II computer when it malfunctioned.
+Upon opening the hardware, engineers found a moth trapped in a relay,
+interfering with the machine's operation. They taped the moth into the
+logbook and wrote, "First actual case of bug being found." From then on,
+the process of removing errors became known as "debugging." While most
+of our bugs today are human-made mistakes in code (not literal insects
+in the machine), the term stuck as a fun piece of computing
+lore.</p> </details></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">4. Debugging Mindset</summary><div style="margin-top: 6px;"><p><br/>
+When confronted with an error: - <strong>Stay calm.</strong> It's easy
+to get frustrated, but try to approach it like a puzzle. - <strong>Read
+the error message (if there is one).</strong> For syntax errors, the
+message is your starting clue. For logic errors, you have to rely on the
+discrepancy between expected and actual behavior. - <strong>Isolate the
+problem.</strong> If it's a syntax error, often it's a small typo or
+missing character. If it's a logic error, figure out which part of your
+program is producing the wrong behavior or output. - <strong>Make one
+change at a time.</strong> Don't randomly change many things hoping it
+fixes the issue. Have a hypothesis: "I think the error is because I did
+X. I will try changing X to Y." Then test again. - <strong>Use tools and
+techniques.</strong> We mentioned inserting print statements to see
+what's going on - that's a simple but powerful technique. As programs
+get more complex, you might use a debugger to step through code or
+inspect variables, but print debugging works in many cases. -
+<strong>Ask for help if stuck.</strong> Sometimes another set of eyes (a
+classmate, instructor, or even just taking a break and coming back
+later) helps find something you overlooked.</p><p>Remember, each time you debug, you're learning. You'll start to
+internalize common mistakes (for example, you'll learn to spot missing
+semicolons almost subconsciously, or you'll remember to check your loop
+conditions to avoid infinite loops, etc.). Even expert developers spend
+a lot of time debugging - it's not a sign that you're a "bad"
+programmer. Writing, running, and debugging code is an iterative
+process. As you practice, you'll get more efficient at it and even start
+writing code in ways that preempt some errors.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Summary of Section 1.3</summary><div style="margin-top: 6px;"><ul>
+<li><strong>Syntax errors</strong> are usually easy to fix once
+identified - the compiler tells you where and what (to some extent) the
+issue is. Always fix these first. - <strong>Logic errors</strong>
+require careful thought - the program runs, so the only clue is "the
+output/result is wrong." You have to compare what you wanted vs. what
+you got and deduce where the code diverged from your intention. -
+<strong>Debugging</strong> is a skill. It improves with practice. Don't
+be afraid of errors; each error message or faulty output is guiding you
+toward the solution.</li>
+</ul><p>As we move on, we'll be writing bigger programs (with multiple
+methods, starting in Section 1.4). That means more places for mistakes
+to hide, but also new tools to manage complexity. Keep the lessons from
+this section in mind: test your programs often, and tackle errors step
+by step. Now, onward to making our programs better structured!</p></div></details></div></details></section>
+    <section style="border: 2px dashed #000; background: #fff; padding: 12px; margin-top: 16px;">
+      <p style="margin: 0; font-weight: 600;">Help us improve:</p>
+      <p style="margin: 4px 0 0;">Let us know what was confusing or where you got stuck. <a href="feedback.html" style="color: #184592; font-weight: 600;">Share anonymous feedback</a>.</p>
+    </section>
+    <div style="margin-top: 16px; text-align: center;">
+      <a href="index.html" style="color: #184592; font-weight: 600;">Back to Chapter 1 Overview</a>
+    </div>
+  </div>
+</body>
+</html>

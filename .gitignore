@@ -1,0 +1,20 @@
+# Compiled Java class files
+*.class
+
+# Build directories
+bin/
+out/
+
+# IDE metadata
+.idea/
+.classpath
+.project
+.settings/
+.vscode/
+
+# OS artifacts
+.DS_Store
+Thumbs.db
+
+# Temporary output
+*.log

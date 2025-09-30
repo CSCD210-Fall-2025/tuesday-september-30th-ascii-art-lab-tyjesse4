@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Section 1.2: And Now -- Java * CSCD210 Study Guide</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="You are responsible for proving code works locally. Terminal commands + thoughtful commits are the muscle memory we are building now.">
+</head>
+<body>
+  <div style="max-width: 900px; margin: 0 auto; font-family: Arial, sans-serif; background: #f7f7f7; border: 2px solid #000; padding: 16px;">
+    <section style="border: 2px solid #000; background: #e8f8ec; padding: 12px; text-align: center;">
+      <h2 style="margin: 0; font-size: 1.6em;"><span style="font-family: monospace;">Section 1.2: And Now -- Java</span></h2>
+      <p style="margin-top: 6px; font-size: 0.95em; color: #333;"><strong>CSCD210</strong> * Programming Principles I * Fall Quarter 2025</p>
+      <p style="margin-top: 8px;">You are responsible for proving code works locally. Terminal commands + thoughtful commits are the muscle memory we are building now.</p>
+    </section>
+<section style="border: 2px solid #000; background: #fff; padding: 14px; margin-top: 16px;">
+      <h3 style="margin: 0 0 8px; font-size: 1.2em;"><span style="font-family: monospace;">Bare minimum checklist</span></h3>
+      <p style="margin: 0 0 8px;">Complete this short workflow in VS Code or Codespaces before you leave the page.</p>
+      <ol style="margin: 0 0 12px 20px;">
+      <li>Create `HelloCSCD210.java`, type the sample program, and save the file in your repository.</li>
+      <li>Open the integrated terminal, run `javac HelloCSCD210.java`, then run `java HelloCSCD210` (no `.java`).</li>
+      <li>Use the Git side panel (three connected dots) to stage the new file and commit with the message `Add HelloCSCD210 hello world`.</li>
+      <li>Keep each commit focused on one idea--code + supporting files that compile together. If that ever fails, undo or fix before committing.</li>
+      </ol>
+      <p style="margin: 0; font-weight: 600;">Why it matters: You are responsible for proving code works locally. Terminal commands + thoughtful commits are the muscle memory we are building now.</p>
+    </section>
+<section style="border: 2px solid #000; background: #fff7e5; padding: 12px; margin-top: 16px;"><details class="section-toggle" style="margin: 0;"><summary style="cursor: pointer; font-weight: 600; font-size: 1.3em;"><span style="font-family: monospace;">Quick Reference</span></summary><div style="margin-top: 10px;"><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Tutorial &amp; code-along: compile, run, commit</summary><div style="margin-top: 6px;"><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #6b6b6b; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">1. Create the file</summary><div style="margin-top: 6px;"><p>Open VS Code or Codespaces, then use File -> New File. Save it as `HelloCSCD210.java` inside your course repository.</p><p>Type the starter program shown below exactly. Every capital letter matters in Java.</p><pre style="background: #f7f7f7; border: 1px solid #ccc; padding: 8px; overflow-x: auto;"><code style="font-family: 'Source Code Pro', monospace;">public class HelloCSCD210 {
+    public static void main(String[] args) {
+        System.out.println("Hello, CSCD210!");
+    }
+}</code></pre></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #6b6b6b; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">2. Compile with `javac`</summary><div style="margin-top: 6px;"><p>Open the integrated terminal (Terminal -> New Terminal). You should see the prompt located in your repository folder.</p><p>Run `ls` (Mac/Linux) or `dir` (Windows) if you need to verify the file is present.</p><p>Compile the program: `javac HelloCSCD210.java`. If you get an error about `javac` not found, pause and visit the Getting Set for CSCD210 checklist linked above.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #6b6b6b; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">3. Run the bytecode</summary><div style="margin-top: 6px;"><p>After a successful compile, a `HelloCSCD210.class` file appears. Run the program with `java HelloCSCD210` (notice there is no `.java`).</p><p>You should see `Hello, CSCD210!` printed. If not, fix the typo the compiler or runtime mentions and retry.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #6b6b6b; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">4. Commit your work</summary><div style="margin-top: 6px;"><p>Open the Source Control panel (icon with three connected dots). You will see unstaged changes.</p><p>Hover over `HelloCSCD210.java` and click the plus icon to stage it. Staging means "this file will go in the next snapshot".</p><p>Enter `Add HelloCSCD210 hello world` as your commit message. Keep messages short, present-tense, and focused on what changed.</p><p>Press the Commit button. If VS Code reports the working tree is dirty or the build failed, fix the error first so the commit always describes compiling code.</p><p style="margin-top: 8px; font-style: italic;">Good habit: keep one feature per commit. If you touched unrelated files, break the work into separate commits so you can undo or review them independently later.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Troubleshooting &amp; frequently asked questions</summary><div style="margin-top: 6px;"><h4 style="margin: 0 0 4px; font-size: 1.05em;">The terminal says `javac: command not found`</h4><p>That means the Java compiler is not on your PATH. Open the Getting Set for CSCD210 link, install Java 21 for your operating system, then restart VS Code so it picks up the new tools.</p><h4 style="margin: 0 0 4px; font-size: 1.05em;">VS Code wants me to run through a button instead of the terminal</h4><p>You can ignore that for now. We are building terminal habits so the process works on campus machines, your laptop, and Codespaces in the same way.</p><h4 style="margin: 0 0 4px; font-size: 1.05em;">I committed but realise I made a mistake</h4><p>Make the fix, stage the updated file, and commit again with a message like `Fix output wording in HelloCSCD210`. Commits are cheap; use them whenever you reach a stable checkpoint.</p></div></details></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Summary</summary><div style="margin-top: 6px;"><p> This section marks our first real dive into
+Java programming. We take the traditional "Hello, world!" program and
+use it to introduce the structure of a Java program: classes, the
+<code>main</code> method, and statements. We learn how to produce output
+using <code>System.out.println</code>, including how to handle text
+(string literals) and special characters (escape sequences). We also
+distinguish between <code>print</code> and <code>println</code>.
+Additionally, we touch on rules for naming things (identifiers and Java
+keywords) and the importance of writing readable code using comments and
+proper formatting. The section concludes with a more complex example
+program (<code>DrawFigures1</code>) that prints a multi-line text
+figure, demonstrating how Java statements can be combined to produce
+intricate output, and highlighting some redundancy that we will later
+address.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Key Concepts and Learning Objectives</summary><div style="margin-top: 6px;"><ul>
+<li>Understand the basic <strong>structure of a Java program</strong>:
+everything is inside a class, and execution starts from the
+<code>main</code> method.</li>
+<li>Learn how to write output to the console using
+<code>System.out.println</code> and <code>System.out.print</code>.</li>
+<li>Know what a <strong>string literal</strong> is (text in quotes) and
+how to include special characters in output using <strong>escape
+sequences</strong> (like <code>\"</code> for quotes, <code>\\</code> for
+backslash, <code>\n</code> for new line).</li>
+<li>Distinguish between <code>print</code> vs <code>println</code> and
+know when to use each (continuing output on the same line vs moving to a
+new line).</li>
+<li>Recognize <strong>identifiers</strong> (names for classes, methods,
+etc.) and understand the basic naming rules and conventions in Java, as
+well as which words are reserved <strong>keywords</strong> that you
+cannot use as names.</li>
+<li>Appreciate the role of <strong>comments</strong> in code for
+documentation, and understand basic comment syntax (<code>//</code> for
+single-line, <code>/* ... */</code> for multi-line).</li>
+<li>Embrace the importance of <strong>readability and style</strong>:
+proper indentation, line breaks, and naming make code easier to
+understand (both for yourself and others).</li>
+<li>Be able to read and write a simple Java program that prints multiple
+lines of output, and be introduced to an example (DrawFigures1) that
+prints a complex ASCII art figure.</li>
+</ul></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">New Terms (Definitions)</summary><div style="margin-top: 6px;"><div style="display: grid; gap: 8px; margin-top: 8px;"><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Class</summary><div style="margin-top: 6px;">A fundamental Java structure that contains code in the form of methods (and sometimes fields). Every Java program is defined inside a class.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Method</summary><div style="margin-top: 6px;">A named sequence of statements (a small sub-program). Methods let you reuse behaviour and organise code.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">main Method</summary><div style="margin-top: 6px;">The entry point of a Java application. Its header is always ; the JVM looks for it when a program starts.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Statement</summary><div style="margin-top: 6px;">A single command or instruction in a program. In Java, statements end with a semicolon--for example .</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">String Literal</summary><div style="margin-top: 6px;">Text enclosed in double quotes, such as .</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Escape Sequence</summary><div style="margin-top: 6px;">A special sequence inside a string that represents a character that is hard to type directly, such as  for a quote or  for a new line.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">System.out</summary><div style="margin-top: 6px;">The standard output stream provided by Java. Calling its  or  methods writes text to the console.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">println vs print</summary><div style="margin-top: 6px;">Both methods output text.  adds a newline at the end of the output whereas  leaves the cursor on the same line.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Identifier</summary><div style="margin-top: 6px;">A name you assign in code (for a class, method, or variable). Identifiers are case-sensitive and cannot be Java keywords or contain spaces.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Keyword</summary><div style="margin-top: 6px;">A word that has a reserved meaning in Java, such as , , or , and therefore cannot be used as an identifier.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Comment</summary><div style="margin-top: 6px;">Text ignored by the compiler that documents code. Java supports  for single-line and  for block comments.</div></details><details class="flashcard" style="border: 1px solid #000; background: #ffffff; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Whitespace/Indentation</summary><div style="margin-top: 6px;">Spaces, tabs, and blank lines that organise code for readability. Java ignores most extra whitespace, but humans rely on it to understand structure.</div></details></div></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">What You Should Know by the End</summary><div style="margin-top: 6px;"><ul>
+<li>How to write a basic Java class with a <code>main</code> method that
+prints output to the console.</li>
+<li>The syntax for calling <code>System.out.println</code> to print
+text, and how to print special characters like quotes or backslashes
+using escape sequences.</li>
+<li>The difference in behavior between <code>System.out.print</code> and
+<code>System.out.println</code>.</li>
+<li>How to choose valid names (identifiers) for classes or other
+elements and be aware of Java keywords that you cannot use as
+names.</li>
+<li>How to write comments in your code and why they are helpful, as well
+as how to format code with proper indentation and spacing for
+clarity.</li>
+<li>That large output tasks can be achieved by many <code>println</code>
+statements, as shown in the DrawFigures1 example, and have an initial
+understanding that while it works, it might result in a lot of
+repetitive code (setting the stage for improvements in later
+sections).</li>
+</ul></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Self-Check Questions (Toggle to reveal answers)</summary><div style="margin-top: 6px;"><ul>
+<li><p><strong>Q: Why does every Java application need a</strong><code>main</code><strong>method?</strong><br/></p><details><summary><strong>Show
+Answer</strong></summary> <p>The <code>main</code>
+method is the entry point of a Java program. When you run a class, the
+Java Virtual Machine looks for the
+<code>public static void main(String[] args)</code> method to know where
+to begin execution. Without a <code>main</code> method, the JVM wouldn't
+know what to execute first, so the program wouldn't run (unless it's a
+special context like Android or applets which have different entry
+points).</p> </details></li>
+<li><p><strong>Q: What is the output of the following
+code?</strong><br/><code>java System.out.print("Hello"); System.out.print("World"); System.out.println("!"); System.out.println("Hello again!");</code><br/></p><details><summary><strong>Show
+Answer</strong></summary> <p>The output will be:<br/>
+<code>HelloWorld!</code><br/>
+<code>Hello again!</code><br/>
+Because <code>System.out.print("Hello")</code> and
+<code>System.out.print("World")</code> print on the same line (no
+newline in between), the text will concatenate as
+<code>HelloWorld</code>. The following
+<code>println("!")</code> will print <code>!</code> immediately after
+"World" and then move to a new line. Finally,
+<code>println("Hello again!")</code> prints <code>Hello again!</code> on
+a new line.</p> </details></li>
+<li><p><strong>Q: Give an example of a valid identifier in Java and an
+example of an invalid one, explaining why it's invalid.</strong><br/></p><details><summary><strong>Show
+Answer</strong></summary> <p>Valid identifier example:
+<code>weatherReport</code> - it starts with a letter and contains only
+letters (and could include digits) and is not a reserved word.<br/>
+Invalid identifier example: <code>3rdPlace</code> - this is invalid
+because it begins with a digit. Identifiers cannot start with a number.
+Another invalid example would be <code>class</code> (all lower-case)
+because <code>class</code> is a Java keyword, so it can't be used as an
+identifier.</p> </details></li>
+</ul></div></details></div></details></section>
+<section style="border: 2px solid #000; background: #e8efff; padding: 12px; margin-top: 16px;"><details class="section-toggle" style="margin: 0;"><summary style="cursor: pointer; font-weight: 600; font-size: 1.3em;"><span style="font-family: monospace;">Tutorial and Code-Along</span></summary><div style="margin-top: 10px;"><p>Now that we've set up the basics of how Java programs run, let's zoom
+in on writing Java code itself. We'll start by examining the simplest
+useful program - the classic <strong>"Hello, world!"</strong> - and then
+build up to more interesting output.</p><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">1. Our First Java Program Explained - Hello,
+world!</summary><div style="margin-top: 6px;"><p><br/>
+It's a tradition in computer science to begin with a program that prints
+"Hello, world!" on the screen. You actually ran a variant of this in
+Section 1.1. Let's look at a canonical example and break it down:</p><pre><code>public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, world!");
+    }
+}</code></pre><p>If you create a file <code>Hello.java</code> with the above code and
+run it, it will output:</p><pre><code>Hello, world!</code></pre><p>Let's dissect the code:</p><ul>
+<li><p><strong>Class definition
+(</strong><code>public class Hello { ... }</code><strong>):</strong>
+This defines a class named <code>Hello</code>. The keyword
+<code>public</code> means this class is accessible to any other code (we
+won't worry about the details of public vs others yet). The curly braces
+<code>{ }</code> enclose the contents of the class. Java uses
+<code>{</code> and <code>}</code> as grouping symbols - every opening
+brace must have a corresponding closing brace. In VS Code, notice how it
+highlights matching braces which helps keep them paired.</p></li>
+<li><p><strong>Main method definition
+(</strong><code>public static void main(String[] args) { ... }</code><strong>):</strong>
+Inside the class, we have this exact method header. For now, treat
+<code>public static void main(String[] args)</code> as boilerplate that
+you need to include so your program can run. A quick idea of each
+part:</p></li>
+<li><p><code>public</code>: means the method is publicly accessible
+(just like the class).</p></li>
+<li><p><code>static</code>: means this method belongs to the class
+itself rather than an instance of the class (we'll explore this later;
+<code>main</code> must be static so it can run without an
+object).</p></li>
+<li><p><code>void</code>: means the method does not return any
+value.</p></li>
+<li><p><code>main</code>: the name of the method. This must be exactly
+<code>main</code> for the program entry point.</p></li>
+<li><p><code>(String[] args)</code>: indicates that the main method
+takes an array of <code>String</code> as parameters. These would be any
+command-line arguments passed to the program. We won't use
+<code>args</code> much initially, but it needs to be there to match the
+expected signature.</p></li>
+<li><p>The method's body is enclosed in its own <code>{ }</code> inside
+the class.</p></li>
+<li><p><strong>Statement inside main
+(</strong><code>System.out.println("Hello, world!");</code><strong>):</strong>
+This is a single Java statement. <code>System.out.println</code> is a
+command that prints a line of text to the console. The text to print is
+given in parentheses as a <strong>string literal</strong>:
+<code>"Hello, world!"</code>. Don't forget the semicolon <code>;</code>
+at the end - in Java, semicolons mark the end of each statement (think
+of it like a period in a sentence, but for code).</p></li>
+</ul><p>When the program runs, it executes the <code>main</code> method:
+encountering <code>System.out.println("Hello, world!");</code> causes
+the message to be displayed, then the program ends (since there are no
+more statements).</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">2. Printing Text and Escape Sequences</summary><div style="margin-top: 6px;"><p><br/>
+So <code>System.out.println</code> is our primary tool for now to
+produce output. You can pass any text you want between the quotes and it
+will print exactly that text (minus the quotes). There are a couple of
+nuances:</p><ul>
+<li>If you want to print multiple pieces of text or values on the same
+line, you can either use multiple <code>print</code> statements or use
+the <code>+</code> operator to concatenate (join) strings. For now,
+we'll stick to one string literal per println for simplicity.</li>
+<li>If you want a newline (line break) in the middle of a string, you
+can either use two <code>println</code> calls or use the escape sequence
+<code>\n</code> inside a string. For example:</li>
+</ul><ul>
+<li><p>System.out.println("Hello,\nworld!");</p>
+<p>would output: Hello, world!</p>
+<p>because <code>\n</code> is interpreted as "new line".</p></li>
+</ul><ul>
+<li>If you need to print a double quote character <code>"</code>, you
+<strong>cannot</strong> just put a raw <code>"</code> inside a string
+literal, because that would be seen as the end of the string. Instead,
+use the escape sequence <code>\"</code>. For example:</li>
+</ul><ul>
+<li><p>System.out.println("He said, "Java is fun."");</p>
+<p>outputs: He said, "Java is fun."</p></li>
+</ul><ul>
+<li>Similarly, to print a single backslash <code>\</code>, use
+<code>\\</code> in the string literal. For example:</li>
+</ul><ul>
+<li><p>System.out.println("C:\Users\Public");</p>
+<p>might output: C:\Users\Public</p>
+<p>(because each <code>\\</code> in the code becomes a single
+<code>\</code> in the output).</p></li>
+</ul><p>Let's practice a bit with printing:</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Now You Try - Playing with</summary><div style="margin-top: 6px;"><p>
+<code>println</code><strong>:</strong> Open up a new class file (or use
+the <code>MyComputer</code> class from earlier) and in the
+<code>main</code> method, add the following statements one by one,
+running the program after each addition to see what happens:</p><pre><code>System.out.println("Hello");
+System.out.println("World");</code></pre><p>When you run this, you should see:</p><pre><code>Hello
+World</code></pre><p>Each <code>println</code> started a new line, so "Hello" and "World"
+appeared on separate lines.</p><p>Now try using <code>print</code> instead of <code>println</code> for
+the first statement:</p><pre><code>System.out.print("Hello");
+System.out.println("World");</code></pre><p>Now the output will be:</p><pre><code>HelloWorld</code></pre><p>Notice there's no newline after "Hello" because we used
+<code>print</code> (which doesn't advance to a new line). The
+<code>println("World")</code> then prints "World" right after "Hello"
+and moves to a new line at the end (though nothing follows). If you
+wanted a space between "Hello" and "World", you'd have to include it,
+for example:</p><pre><code>System.out.print("Hello ");
+System.out.println("World");</code></pre><p>would output <code>Hello World</code> on one line.</p><p>Try an example with an escape sequence:</p><pre><code>System.out.println("She said \"Java is cool!\" with enthusiasm.");</code></pre><p>The output should be:</p><pre><code>She said "Java is cool!" with enthusiasm.</code></pre><p>Here the quote marks around <strong>Java is cool!</strong> appear
+because we used <code>\"</code> in the string.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">3. Using Special Characters and Formatting
+Output</summary><div style="margin-top: 6px;"><p><br/>
+Escape sequences allow you to format output beyond plain characters. A
+few common escape sequences in Java: - <code>\n</code> - newline -
+<code>\"</code> - double quote - <code>\\</code> - backslash -
+<code>\t</code> - tab character (adds horizontal tab spacing)</p><p>Feel free to experiment with these. For instance:</p><pre><code>System.out.println("Item\tPrice");
+System.out.println("Pen\t$1.20");
+System.out.println("Notebook\t$2.50");</code></pre><p>This would output a simple tab-separated list:</p><pre><code>Item    Price
+Pen     $1.20
+Notebook        $2.50</code></pre><p>(The spacing might align differently depending on text length, but
+you get the idea: <code>\t</code> jumps to the next tab stop.)</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">4. Understanding Identifiers and Keywords</summary><div style="margin-top: 6px;"><p><br/>
+When writing Java code, you'll be coming up with names for classes,
+methods, and later variables. These names are
+<strong>identifiers</strong>. There are a few rules and conventions: -
+<strong>Rules:</strong> Identifiers can include letters, digits,
+underscores <code>_</code>, and dollar signs <code>$</code>. However,
+they <em>cannot</em> start with a digit, and they cannot be a reserved
+Java keyword. Also, no spaces or other special characters are allowed.
+For example, <code>myValue</code> and <code>value2</code> are valid, but
+<code>2value</code> is not (starts with digit), <code>my value</code> is
+not (contains space), and <code>class</code> is not (keyword). -
+<strong>Conventions:</strong> By convention, Java class names start with
+a capital letter (e.g., <code>Hello</code>, <code>MyComputer</code>) and
+use capital letters to start each new word (CamelCase). Methods and
+variables start with a lowercase letter and also use camelCase (e.g.,
+<code>println</code> is a method name). Constants (which we'll see
+later) are usually in ALL_CAPS. Following conventions isn't required by
+the compiler, but it's the standard style and makes your code more
+readable to others.</p><p>In the <code>Hello</code> program above: - <code>Hello</code> is an
+identifier (class name). - <code>args</code> is an identifier (the name
+of the parameter in <code>main</code>). - Words like
+<code>public</code>, <code>class</code>, <code>static</code>,
+<code>void</code>, <code>String</code> are <strong>not</strong>
+identifiers you chose; they are part of Java's vocabulary (keywords or
+class names from the Java API). For example, <code>class</code> and
+<code>public</code> are keywords. You'll get to know many of these
+keywords as you continue; for now, just remember you can't use them for
+your own names.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">5. Comments and Readability</summary><div style="margin-top: 6px;"><p><br/>
+As programs grow beyond a few lines, <strong>readability</strong>
+becomes very important. Code is read by humans (often more times than
+it's written), so we follow formatting conventions: - Indent inside
+braces: The contents of a class are indented 4 spaces (or a tab,
+depending on settings) inside the class braces. Contents of methods are
+indented inside the method braces, and so on. This visual hierarchy
+makes it easy to see what's inside what. - One statement per line: Don't
+cram multiple <code>;</code> separated statements on one line. Use a new
+line for each. - Use blank lines to separate logical sections of code
+(for instance, a block of variable declarations from a block of
+computations, or to separate methods). - Choose meaningful names for
+classes and methods that reflect their purpose. - Use comments to
+explain non-obvious parts of code or the overall purpose of the
+program.</p><p>A <strong>comment</strong> is a note in the source code for humans.
+Java ignores comments when running the program. There are two main
+types: - Single-line comment: start with <code>//</code>. Everything
+after <code>//</code> on that line is ignored. For example:</p><pre><code>// This is a comment explaining the next line of code
+System.out.println("Hi"); // This comment is at end of a line</code></pre><p>- Multi-line (block) comment: start with <code>/*</code> and end with
+<code>*/</code>. Everything in between is ignored, even if it spans
+multiple lines. For example:</p><pre><code>/* 
+   This is a block comment.
+   It can span multiple lines.
+*/
+System.out.println("Hi");</code></pre><p>Block comments are often used for longer explanations or disabling
+large sections of code during testing.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">An example of poor vs. good formatting</summary><div style="margin-top: 6px;"><p><br/>
+Consider this poorly formatted (though technically valid) Java
+program:</p><pre><code>public class Ugly {public static void main(String[] args) {System.out.print("How");System.out.print("short");System.out.println("am I?");}}</code></pre><p>If you try to read this, it's a mess! The program itself just prints
+"Howshortam I?" (actually all concatenated because they forgot spaces).
+It's hard to tell where one statement ends and the next begins, and
+where the class or method boundaries are. Now look at a well-formatted
+version:</p><pre><code>public class Ugly {
+    public static void main(String[] args) {
+        System.out.print("How");
+        System.out.print(" short");
+        System.out.println(" am I?");
+    }
+}</code></pre><p>Now we can clearly see: - The class <code>Ugly</code> and its opening
+<code>{</code>, with a matching closing <code>}</code> aligned under the
+<code>p</code> in <code>public</code>. - The <code>main</code> method
+inside, indented. - Each statement on its own line, indented inside
+<code>main</code>. - We also fixed the output to include spaces so it
+prints <code>How short am I?</code> instead of
+<code>Howshortam I?</code>. (Concatenation of strings in separate print
+statements does not add spaces or punctuation automatically - you have
+to include them in the strings.)</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Now You Try - Spot and Fix Formatting Issues</summary><div style="margin-top: 6px;"><p><br/>
+Below is a snippet of code. It has correct syntax (it will run), but the
+style is intentionally bad. Identify at least three style issues and
+think about how you'd fix them:</p><pre><code>public class Greeter {public static void main(String[] args) {System.out.println("Hello, CS1 Students!");System.out.println("Welcome to Java");}}</code></pre><p>Issues you might notice: - Everything is on one line, which is very
+hard to read. - No indentation for the contents of the class or method.
+- It's not immediately obvious where the class or method start and
+end.</p><p>A nicely formatted version would be:</p><pre><code>public class Greeter {
+    public static void main(String[] args) {
+        System.out.println("Hello, CS1 Students!");
+        System.out.println("Welcome to Java");
+    }
+}</code></pre><p>Now the structure is clear at a glance.</p><p>Remember, <em>the compiler doesn't care about spaces or newlines
+(except that they can't be in the middle of tokens)</em>, but humans
+<strong>do care</strong>. As you write code, always format it
+consistently. The good news is, IDEs like VS Code can auto-format your
+code (usually there's a command or it happens on save, depending on your
+setup).</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">6. A Complex Example: DrawFigures1</summary><div style="margin-top: 6px;"><p><br/>
+So far, we've focused on very small programs with one or two print
+statements. Let's push this a bit further and see a program that
+produces a more elaborate output. This will reinforce everything we've
+learned and also set the stage for the next sections where we'll learn
+to structure code better.</p><p>Consider the following program <code>DrawFigures1</code> (imagine we
+saved it as <code>DrawFigures1.java</code>). It uses a bunch of
+<code>System.out.println</code> calls to draw a text figure:</p><pre><code>public class DrawFigures1 {
+    public static void main(String[] args) {
+        System.out.println("  /\\");
+        System.out.println(" /  \\");
+        System.out.println("/    \\");
+        System.out.println("\\    /");
+        System.out.println(" \\  /");
+        System.out.println("  \\/");
+        System.out.println();
+        System.out.println("\\    /");
+        System.out.println(" \\  /");
+        System.out.println("  \\/");
+        System.out.println("  /\\");
+        System.out.println(" /  \\");
+        System.out.println("/    \\");
+        System.out.println();
+        System.out.println("  /\\");
+        System.out.println(" /  \\");
+        System.out.println("/    \\");
+        System.out.println("+------+");
+        System.out.println("|      |");
+        System.out.println("|      |");
+        System.out.println("+------+");
+        System.out.println("|United|");
+        System.out.println("|States|");
+        System.out.println("+------+");
+        System.out.println("|      |");
+        System.out.println("|      |");
+        System.out.println("+------+");
+        System.out.println("  /\\");
+        System.out.println(" /  \\");
+        System.out.println("/    \\");
+    }
+}</code></pre><p><em>(Take a deep breath - that's a lot of lines!)</em></p><p>Notice how the string literals use <code>\\</code> whenever we want a
+single backslash in the output, and how some lines have leading spaces
+to position the shapes correctly. We also use blank
+<code>System.out.println();</code> statements to create blank lines in
+the output (there are two <code>println();</code> calls with empty
+strings or no string to separate figure sections).</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">What does this program output?</summary><div style="margin-top: 6px;"><p> If you run it, you
+will see a multi-part ASCII art figure. It should look like this:</p><pre><code>  /\
+ /  \
+/    \
+\    /
+ \  /
+  \/
+
+\    /
+ \  /
+  \/
+  /\
+ /  \
+/    \
+
+  /\
+ /  \
+/    \
++------+
+|      |
+|      |
++------+
+|United|
+|States|
++------+
+|      |
+|      |
++------+
+  /\
+ /  \
+/    \</code></pre><p>It may be a bit hard to visualize here in text, but examine the
+patterns: - The first part looks like a <strong>diamond</strong> shape
+or hourglass (a triangle pointing up and a triangle pointing down
+touching each other). Specifically:</p><pre><code>  /\
+ /  \
+/    \
+\    /
+ \  /
+  \/</code></pre><p>(with appropriate spacing to align the slashes). - The second part
+(after the first blank line) looks like an <strong>X</strong> shape:</p><pre><code>\    /
+ \  /
+  \/
+  /\
+ /  \
+/    \</code></pre><p>(that's like an hourglass flipped vertically). - The third part
+(after the second blank line) looks like a <strong>rocket or
+tower</strong>: - It starts with the same triangle shape pointing up. -
+Then <code>+------+</code> and the lines with <code>| |</code> form a
+rectangular section. - The lines <code>|United|</code> and
+<code>|States|</code> are printed in the middle, then another
+<code>+------+</code> and more <code>| |</code> lines, etc., and finally
+the triangle shape at the bottom again. - If you interpret it, it's like
+a rocket with the nose cone (triangles), a body with "United States"
+written on it and sections separated by horizontal lines.</p><p>This program is correct in that it produces the intended output.
+However, it's clearly very repetitive and long. We have many lines of
+code that are almost the same, just with varying amounts of spaces. For
+example, the triangle shape at the top is printed three times in this
+program (twice at the top part and once at the bottom). The rectangle
+frame <code>+------+</code> and blank interior lines are repeated
+multiple times as well.</p><p>At this point, you might not know how to avoid that repetition - but
+you might sense that there <em>should</em> be a better way than copying
+and pasting those <code>println</code> statements. <strong>You're
+absolutely right!</strong> In the next sections, we will learn how to
+eliminate such redundancy by using methods (Section 1.4) and other
+techniques. For now, though, this example serves to: - Give you practice
+reading a larger block of code and recognizing patterns. - Reinforce the
+importance of good formatting. Imagine if the above code were not neatly
+indented or spaced out - it would be almost impossible to debug. Thanks
+to indentation, you can match each output line in the code to the shape
+in the output visually. - Show a real use of escape sequences (notice
+all those <code>\\</code> in the code that produce single <code>\</code>
+in output). - Emphasize that the Java compiler doesn't mind how many
+lines of code you write or if you repeat yourself - but as programmers,
+we mind, because it's error-prone and tedious. We'll soon fix that with
+better techniques.</p></div></details><details class="nested-toggle" style="margin-top: 8px; border: 1px solid #000; background: #fbfbfb; padding: 8px;"><summary style="cursor: pointer; font-weight: 600;">Now You Try - Modify the DrawFigures1 Output</summary><div style="margin-top: 6px;"><p><br/>
+If you're up for a challenge, try a small modification to the
+<code>DrawFigures1</code> program: - Change the text "United States" to
+something else (for example, your name or your school's name), making
+sure it still fits within the vertical bars. Run the program to see the
+change in the figure. - Or, try to add another shape to the figure by
+copying one of the sections. For example, after the last triangle, maybe
+you want to print another diamond. You can copy the code for the first
+diamond section and append it, then run to see the extended output.</p><p>These modifications will give you practice editing a larger program
+and ensuring you place code in the right spot. Each time, compile and
+run to check that your changes worked as expected (and that you didn't
+accidentally break the syntax - a missed quote or backslash can cause
+errors or unintended output).</p><details><summary><strong>Reveal Full DrawFigures1
+Code (Solution)</strong></summary></details><pre><code>public class DrawFigures1 {
+    public static void main(String[] args) {
+        System.out.println("  /\\");
+        System.out.println(" /  \\");
+        System.out.println("/    \\");
+        System.out.println("\\    /");
+        System.out.println(" \\  /");
+        System.out.println("  \\/");
+        System.out.println();
+        System.out.println("\\    /");
+        System.out.println(" \\  /");
+        System.out.println("  \\/");
+        System.out.println("  /\\");
+        System.out.println(" /  \\");
+        System.out.println("/    \\");
+        System.out.println();
+        System.out.println("  /\\");
+        System.out.println(" /  \\");
+        System.out.println("/    \\");
+        System.out.println("+------+");
+        System.out.println("|      |");
+        System.out.println("|      |");
+        System.out.println("+------+");
+        System.out.println("|United|");
+        System.out.println("|States|");
+        System.out.println("+------+");
+        System.out.println("|      |");
+        System.out.println("|      |");
+        System.out.println("+------+");
+        System.out.println("  /\\");
+        System.out.println(" /  \\");
+        System.out.println("/    \\");
+    }
+}</code></pre><p><em>Full code for DrawFigures1, for reference.</em> When run, it
+produces the multi-part figure as described. Notice how repetitive it is
+- that's something we'll improve soon! &lt;/details&gt;</p><p>With this example in mind, you might be motivated to learn how to
+avoid writing the same <code>println</code> lines over and over. Good
+news: <strong>Section 1.4</strong> (Procedural Decomposition) will
+introduce static methods, which will let us reorganize and reuse code,
+making programs like DrawFigures much shorter and cleaner. But before
+that, in <strong>Section 1.3</strong>, we will step back and talk about
+what can go wrong in programs - errors and bugs - and how to start
+thinking about troubleshooting them.</p></div></details></div></details></section>
+    <section style="border: 2px dashed #000; background: #fff; padding: 12px; margin-top: 16px;">
+      <p style="margin: 0; font-weight: 600;">Help us improve:</p>
+      <p style="margin: 4px 0 0;">Let us know what was confusing or where you got stuck. <a href="feedback.html" style="color: #184592; font-weight: 600;">Share anonymous feedback</a>.</p>
+    </section>
+    <div style="margin-top: 16px; text-align: center;">
+      <a href="index.html" style="color: #184592; font-weight: 600;">Back to Chapter 1 Overview</a>
+    </div>
+  </div>
+</body>
+</html>

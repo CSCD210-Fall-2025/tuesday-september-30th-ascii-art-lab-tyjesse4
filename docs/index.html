@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CSCD210 Lab 1 - ASCII Art &amp; Chapter 1</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 1rem;
+      color: #212121;
+      background-color: #ffffff;
+    }
+    nav ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    nav li {
+      display: inline;
+    }
+    nav a {
+      text-decoration: none;
+      color: #004085;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    section {
+      margin-top: 2rem;
+    }
+    details {
+      margin: 0.5rem 0;
+      border-left: 3px solid #ccc;
+      padding-left: 0.5rem;
+    }
+    summary {
+      font-weight: bold;
+      cursor: pointer;
+    }
+    pre {
+      background-color: #f7f7f7;
+      padding: 0.75rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      overflow-x: auto;
+    }
+    footer {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #555;
+    }
+    .callout {
+      background: #eef4fb;
+      border: 1px solid #c3d4ea;
+      border-radius: 4px;
+      padding: 0.75rem 1rem;
+      margin: 1rem 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Lab 1: ASCII Art and Chapter 1</h1>
+  <p>
+    This site accompanies the GitHub Classroom assignment for CSCD 210 Lab 1. It
+    provides a self-paced tutorial covering the essentials of Chapter 1 and the
+    tasks you'll complete in this lab. Use the navigation below to jump to
+    different parts of the lab. Expand the panels to explore deeper explanations.
+  </p>
+  <p class="callout"><strong>Need the quick reference?</strong> Visit the <a href="bjp-ch-1/">Chapter 1 companion summary</a> for focused review notes.</p>
+  <nav>
+    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#part1">Part 1: Basic Program</a></li>
+      <li><a href="#part2">Part 2: Decomposition</a></li>
+      <li><a href="#part3">Part 3: Debugging</a></li>
+      <li><a href="#extras">Extras</a></li>
+      <li><a href="#pages">GitHub Pages Setup</a></li>
+    </ul>
+  </nav>
+
+  <section id="overview">
+    <h2>Overview and Objectives</h2>
+    <p>In this lab you will practice the following skills:</p>
+    <ul>
+      <li>Write a complete Java program and run it using <code>javac</code> and <code>java</code>.</li>
+      <li>Print console output with <code>System.out.println</code> and use escape sequences.</li>
+      <li>Refactor code into static methods for clarity and reuse.</li>
+      <li>Identify and fix syntax, runtime, and logic errors.</li>
+    </ul>
+    <p>
+      The tasks mirror the sections of Chapter 1: from understanding how a Java
+      program runs, to using methods, to diagnosing common errors. Feel free to
+      explore the deeper explanations inside the expandable panels.
+    </p>
+  </section>
+
+  <section id="part1">
+    <h2>Part 1: Writing and Running Your First Program</h2>
+    <p>
+      Start by creating <code>AsciiArt.java</code> in the root of your repository.
+      This file should define a <strong>public class</strong> named
+      <code>AsciiArt</code> with a <code>public static void main(String[] args)</code>
+      method.
+    </p>
+    <details>
+      <summary>Why do we compile before running?</summary>
+      <p>
+        Java source files (<code>.java</code>) are human-readable. Before the
+        computer can run your code, the Java compiler (<code>javac</code>)
+        translates it into bytecode (<code>.class</code> files). The Java
+        Virtual Machine (<code>java</code>) then interprets that bytecode.
+        Attempting to run a <code>.java</code> file directly will result in an
+        error because the JVM requires compiled bytecode to execute.
+      </p>
+    </details>
+    <p>
+      Inside <code>main</code>, write <code>System.out.println</code> statements
+      to print your artwork. Each line of your picture should be printed by a
+      separate call. For example:
+    </p>
+    <pre><code>System.out.println("  /\\");
+System.out.println(" /  \\");
+System.out.println("/____\\");</code></pre>
+    <p>When your code is ready, compile and run it:</p>
+    <pre><code>javac AsciiArt.java
+java AsciiArt</code></pre>
+    <details>
+      <summary>Need help with escape sequences?</summary>
+      <p>
+        To include characters that have special meaning in Java strings, you
+        must use <em>escape sequences</em>. The backslash (<code>\</code>)
+        introduces an escape sequence and tells the compiler to treat the next
+        character differently. Here are the most common escapes you will use
+        when printing ASCII art:
+      </p>
+      <ul>
+        <li>
+          <strong>Backslash:</strong> write <code>"\\"</code> to produce a single
+          backslash (<code>\</code>) in your output. Because <code>\</code>
+          starts an escape sequence, you need two backslashes in a row to
+          represent one literal backslash.
+        </li>
+        <li>
+          <strong>Double quote:</strong> write <code>\"</code> to include a
+          double quote (<code>"</code>) inside a string. Without escaping, a
+          double quote would prematurely end the string.
+        </li>
+        <li>
+          <strong>New line:</strong> <code>\n</code> creates a line break
+          <em>inside</em> a single string literal. You usually won't need this
+          in simple print statements because <code>System.out.println</code>
+          already moves to the next line, but it's handy when building
+          multi-line strings.
+        </li>
+        <li>
+          <strong>Tab:</strong> <code>\t</code> inserts a horizontal tab. This
+          can be useful for aligning columns of text; each <code>\t</code>
+          moves the cursor to the next tab stop.
+        </li>
+        <li>
+          <strong>Single quote:</strong> <code>\'</code> allows you to print a
+          single quote (<code>'</code>) inside a character or string literal. In
+          double-quoted strings you don't strictly need to escape single
+          quotes, but it's required inside single-quoted character literals.
+        </li>
+      </ul>
+      <p>
+        Make sure each <code>System.out.println</code> statement ends with a
+        semicolon; forgetting one will cause a compile error. See the
+        <em>Common syntax errors</em> section below for examples.
+      </p>
+    </details>
+
+    <details>
+      <summary>Want some fun ASCII art examples?</summary>
+      <p>
+        Looking for inspiration that uses escape sequences? We've included a few
+        ready-made designs in the <code>ascii_art/</code> folder of this
+        repository. Each <code>.txt</code> file contains an ASCII picture that
+        features characters such as quotes, backslashes and tabs. You can
+        copy the contents into your <code>AsciiArt.java</code> program and see
+        how to escape those characters properly in your code. 
+      </p>
+      
+    </details>
+  </section>
+
+  <section id="part2">
+    <h2>Part 2: Procedural Decomposition with Static Methods</h2>
+    <p>
+      Once your picture prints correctly, look for patterns: do you repeat the
+      same group of lines? You can extract those into a helper method to avoid
+      duplication.
+    </p>
+    <p>Define a new static method outside <code>main</code>:</p>
+    <pre><code>public static void drawCone() {
+    System.out.println("   /\\");
+    System.out.println("  /  \\");
+    System.out.println(" /    \\");
+}</code></pre>
+    <p>Then call it from <code>main</code> wherever you need that pattern:</p>
+    <pre><code>public static void main(String[] args) {
+    drawCone();
+    System.out.println("|      |");
+    System.out.println("+------+");
+    drawCone();
+}</code></pre>
+    <details>
+      <summary>Why decompose?</summary>
+      <p>
+        Breaking your program into methods makes it easier to read and maintain.
+        If you need to change the cone shape, you edit the method once and all
+        calls update automatically. Methods also help you name logical tasks;
+        <code>drawCone()</code> clearly communicates its purpose without
+        revealing the details inside.
+      </p>
+    </details>
+    <p>
+      Try creating methods like <code>drawDiamond()</code>, <code>drawX()</code>, and
+      <code>drawRocket()</code> in your own program. See the files in
+      <code>examples/</code> for reference.
+    </p>
+  </section>
+
+  <section id="part3">
+    <h2>Part 3: Debugging and Error Types</h2>
+    <p>Chapter 1 introduces three types of errors:</p>
+    <ul>
+      <li><strong>Syntax errors:</strong> Violations of Java grammar, such as
+        missing semicolons, braces, or incorrect capitalization. The compiler
+        catches these.</li>
+      <li><strong>Runtime errors:</strong> Errors that occur while the program
+        runs, like dividing by zero or accessing an invalid array index. These
+        cause your program to crash.</li>
+      <li><strong>Logic errors:</strong> Mistakes in your algorithm that produce
+        wrong output even though the program compiles and runs.</li>
+    </ul>
+    <details>
+      <summary>Practice spotting syntax errors</summary>
+      <p>
+        Open <code>extras/Tricky.java</code>. It contains eleven syntax errors.
+        Compile it with <code>javac</code> and read the error messages. Fix the
+        errors one by one until it compiles and runs. Hint: check for missing
+        braces, incorrect method headers, and unquoted strings.
+      </p>
+    </details>
+    <details>
+      <summary>Investigate runtime and logic errors</summary>
+      <p>
+        In <code>extras/RuntimeErrorExample.java</code>, running the program
+        will crash because it divides by zero. The stack trace shows the line
+        where the error occurred. In <code>extras/LogicErrorExample.java</code>,
+        the program prints <code>1 + 1 = 11</code> instead of <code>2</code>
+        because of string concatenation. Fixing these will help you understand
+        runtime and logic errors.
+      </p>
+    </details>
+
+    <!-- Additional tutorial on common syntax errors and reading compiler messages -->
+    <details>
+      <summary>Common syntax errors and reading error messages</summary>
+      <p>
+        New programmers often make the same kinds of syntax mistakes. When
+        you compile, the Java compiler tells you what went wrong, but the
+        messages can be cryptic at first. Here are some tips and examples
+        using the files in the <code>errors/</code> folder:
+      </p>
+      <h3>How to read a compiler error</h3>
+      <p>
+        An error message typically includes the name of the file and the line
+        number where the compiler got confused. The text after
+        <code>error:</code> describes what it was expecting or what it couldn't
+        find. A caret (<code>^</code>) appears on the next line to point
+        underneath the code near the problem. Focus on the <em>first</em> error
+        reported and fix that one; many subsequent errors are just side
+        effects of the first.
+      </p>
+      <h3>Examples to try</h3>
+      <p>
+        Compile each of these files with <code>javac</code> to see the
+        corresponding error messages. Then read the comments in each file and
+        use the hints below to correct them:
+      </p>
+      <ul>
+        <li>
+          <strong><code>MissingSemicolon.java</code></strong> - The
+          <code>System.out.println</code> call is missing its ending semicolon.
+          You'll see an error like:
+          <pre><code>MissingSemicolon.java:4: error: ';' expected
+    System.out.println("Hello world")
+                                    ^
+1 error</code></pre>
+          The compiler expected a semicolon at the end of the statement. Fix
+          it by adding <code>;</code> after the closing parenthesis.
+        </li>
+        <li>
+          <strong><code>UnclosedString.java</code></strong> - A string literal is
+          missing its closing double quote. The compiler will report an
+          <em>unclosed string literal</em> and point near the missing quote:
+          <pre><code>UnclosedString.java:4: error: unclosed string literal
+    System.out.println("This string never ends);
+                                    ^
+1 error</code></pre>
+          Make sure every opening quote has a matching closing quote and that
+          special characters inside the string are properly escaped.
+        </li>
+        <li>
+          <strong><code>WrongCase.java</code></strong> - Java is case sensitive.
+          Here the code uses <code>system.out</code> instead of
+          <code>System.out</code>. The compiler cannot find a variable named
+          <code>system</code>, so you get:
+          <pre><code>WrongCase.java:4: error: cannot find symbol
+    system.out.println("Oops wrong case");
+    ^
+  symbol:   variable system
+  location: class WrongCase
+1 error</code></pre>
+          Capitalise <code>System</code> correctly to fix the error.
+        </li>
+        <li>
+          <strong><code>MissingBrace.java</code></strong> - When braces don't
+          match, the compiler eventually reaches the end of the file and
+          reports something like <code>reached end of file while parsing</code>:
+          <pre><code>MissingBrace.java:6: error: reached end of file while parsing
+}
+^
+1 error</code></pre>
+          Check that every opening brace <code>{</code> has a corresponding
+          closing brace <code>}</code>. In this file the <code>main</code> method
+          ends without its own closing brace.
+        </li>
+        <li>
+          <strong><code>MissingParenthesis.java</code></strong> - If you forget a
+          closing parenthesis, you'll see an error like
+          <code>')' expected</code> depending on what's missing:
+          <pre><code>MissingParenthesis.java:4: error: ')' expected
+    System.out.println("Missing parenthesis"
+                                               ^
+1 error</code></pre>
+          Add the missing <code>)</code> to match the opening parenthesis in the
+          method call.
+        </li>
+      </ul>
+      <p>
+        As you fix each mistake and recompile, the error messages will
+        disappear. Eventually, the compiler will succeed and you can run the
+        program. Developing the habit of reading and understanding compiler
+        feedback early will save you lots of time later!
+      </p>
+    </details>
+  </section>
+
+  <section id="extras">
+    <h2>Extras and Optional Challenges</h2>
+    <p>If you finish early or want a deeper challenge:</p>
+    <ul>
+      <li>Create a more complex ASCII art scene and refactor it into many helper
+        methods.</li>
+      <li>Format <code>extras/Ugly.java</code> properly using multiple lines and
+        consistent indentation.</li>
+      <li>Write a small program that intentionally contains a logic error and
+        challenge a classmate to find it.</li>
+      <li>Try the <code>examples/MethodTrace.java</code> example and predict
+        its output before running it.</li>
+    </ul>
+  </section>
+
+  <section id="pages">
+    <h2>Using GitHub Pages</h2>
+    <p>
+      This lab uses the <code>docs/</code> folder to store the website. Once you
+      push your repository to GitHub Classroom, you can enable GitHub Pages to
+      serve these docs as a website:
+    </p>
+    <ol>
+      <li>Go to your repository on GitHub.</li>
+      <li>Click <strong>Settings</strong> &gt; <strong>Pages</strong>.</li>
+      <li>Under <strong>Source</strong>, choose <em>Deploy from a branch</em>
+        and select the <em>main</em> branch and <em>docs/</em> folder. Click
+        <strong>Save</strong>.</li>
+      <li>
+        After a minute, your site will be live at
+        <code>https://&lt;your-username&gt;.github.io/&lt;your-repo-name&gt;/</code>.
+        Replace the placeholders with your GitHub username and repository name.
+      </li>
+    </ol>
+    <p>
+      GitHub Pages will automatically serve any static HTML files in the
+      <code>docs/</code> directory. You can customize this site further by
+      editing these HTML files or adding new pages.
+    </p>
+  </section>
+
+  <footer>
+    <p>
+      Adapted from Chapter 1 materials of
+      <em>Building Java Programs, 5th Ed.</em>
+    </p>
+  </footer>
+</body>
+</html>
